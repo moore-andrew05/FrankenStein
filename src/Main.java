@@ -1,10 +1,11 @@
+
 public class Main {
     public static void main(String[] args) throws Exception {
         UserIn in = new UserIn();        
 
         String dir = in.getInput("Enter log file directory");
         String out_dir = in.getInput("Enter output directory");
-        String out_name = in.getInput("Enter configuration file name (Will be incremented based on # of images in folder)");
+        String out_name = in.getInput("Enter configuration file name (Will be incremented based on # of images in folder) [Do not add .txt to end]");
 
         dirParser dp = new dirParser(dir);
         FileReader fr = new FileReader(dir, dp);
@@ -18,16 +19,23 @@ public class Main {
             fw.outputBuilder(fr.getPrintList().get(i-1), dp.getFirstImage() - 1 + i);
         }
 
+        FrankenStitch frank = new FrankenStitch();
         System.out.println("Config Files Built! \n" +
-                            "Stitch reference images, when finished, press enter.");
+                            "Stitching reference images...");
 
-        in.getInput("\nPress Enter When Ready:");
+        for(int i = 0; i < fw.getRefTiles().size(); i++) {
+            frank.BigStitch(0, fw.getRefTiles().get(i), dir, "Fused" + (dp.getFirstImage() + i) + "_REF.tif");
+        }
 
         ConfigConverter cc = new ConfigConverter(dir, dp);
         for(int i = 0; i < cc.getPrintList().size(); i++) {
             fw.outputBuilder2(cc.getPrintList().get(i), dp.getFirstImage() + i);
         }
 
-        System.out.println("Final Config files saved, proceed to stitch full z stacks.");
+        System.out.println("Final Config files saved, Stitching full Stacks...");
+
+        for(int i = 0; i < fw.getFloTiles().size(); i++) {
+            frank.BigStitch(1, fw.getFloTiles().get(i), dir, "Fused" + (dp.getFirstImage() + i) + "_FLO.tif");
+        }
     }
 }
