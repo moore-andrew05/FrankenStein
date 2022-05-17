@@ -11,7 +11,6 @@ public class ConfigConverter {
     dirParser parsed;
     List<String> printList = new ArrayList<>();
 
-
     FilenameFilter registeredFilter = new FilenameFilter() {
         public boolean accept(File f, String name)
                 {
@@ -61,9 +60,4 @@ public class ConfigConverter {
             return null;
         }
     }
-
-
-
-
-
 }
