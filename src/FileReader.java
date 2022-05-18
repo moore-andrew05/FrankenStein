@@ -22,6 +22,7 @@ public class FileReader {
     public List<String> getPrintList() {
         return printList;
     }
+    
 
     //Reads in the REF log file and returns only the line with the Stage coordinates
     private String lineReader(String filename) {

@@ -16,6 +16,8 @@ import loci.plugins.in.ImporterOptions;
 import stitching.CommonFunctions;
 import stitching.utils.Log;
 
+// import mpicbg.model.TranslationModel3D;
+// import mpicbg.model.TranslationModel2D;
 import mpicbg.models.TranslationModel2D;
 import mpicbg.models.TranslationModel3D;
 import mpicbg.stitching.Downsampler;

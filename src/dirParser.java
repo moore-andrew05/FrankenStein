@@ -1,6 +1,8 @@
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FilenameFilter;
 import java.util.List;
+import java.util.Scanner;
 import java.util.ArrayList;
 
 public class dirParser {
@@ -9,6 +11,8 @@ public class dirParser {
     List<List<String>> cleanfileList = new ArrayList<List<String>>(); //Sorted File list.
     int first_img;
     int last_img;
+    int dim = 3;
+
 
     FilenameFilter refLogFilter = new FilenameFilter() {
         public boolean accept(File f, String name)
@@ -29,6 +33,33 @@ public class dirParser {
         rawfileList = this.dir.list(refLogFilter);
         this.first_img = findFirstImage();
         this.last_img = findLastImage();
+        this.dim = findDim();
+    }
+
+    private int findDim() {
+        File tmp = new File(dir + "/" + this.dir.list(logFilter)[0]);
+        System.out.println(tmp);
+        try {
+            try (Scanner in = new Scanner(tmp)) {
+                while(in.hasNextLine()) {
+                    String line = in.nextLine().toLowerCase();
+                    if (line.trim().startsWith("zwt")) {
+                        if(Integer.parseInt(line.substring(line.indexOf(":") + 1, 
+                        line.indexOf("x", line.indexOf(":"))).trim()) == 1) return 2;
+                        return 3;
+                    } 
+                }
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return 3;
+    } 
+
+    public int getDim() {
+        return dim;
     }
 
     public int getLastImage() {
@@ -91,5 +122,10 @@ public class dirParser {
             }
             cleanfileList.add(tmp);
         }
+    }
+
+    public static void main(String[] args) {
+        dirParser d = new dirParser("E:/local_files/Stitching/20220328_CL2122worms");
+        System.out.println(d.getDim());
     }
 }

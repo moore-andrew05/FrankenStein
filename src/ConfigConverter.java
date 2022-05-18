@@ -10,6 +10,7 @@ public class ConfigConverter {
     String[] fileList;
     dirParser parsed;
     List<String> printList = new ArrayList<>();
+    int dim;
 
     FilenameFilter registeredFilter = new FilenameFilter() {
         public boolean accept(File f, String name)
@@ -18,7 +19,8 @@ public class ConfigConverter {
                 }
     };
 
-    public ConfigConverter(String dir, dirParser parsed) {
+    public ConfigConverter(String dir, dirParser parsed, int dim) {
+        this.dim = dim;
         this.dir = new File(dir);
         fileList = this.dir.list(registeredFilter);
         looper(fileList);
@@ -34,13 +36,17 @@ public class ConfigConverter {
         String rtn = "";
         while(file.hasNextLine()) {
             String line = file.nextLine();
-            if(line.startsWith("dim")) {
-                rtn += "dim=3\n";
+            if(line.startsWith("dim") && dim == 3) {
+                rtn += "dim = 3\n";
             } else if(line.startsWith("image")) {
-                String edited = line.substring(0, line.length() - 1) + ", 0.0)\n";
-                rtn += edited.replaceAll("_REF", "");
+                if (this.dim == 3) {
+                    String edited = line.substring(0, line.length() - 1) + ", 0.0)\n";
+                    rtn += edited.replaceAll("_REF", "");
+                } else {
+                    rtn += line.replaceAll("_REF", "") + "\n";
+                }
             } else {
-                rtn += "\n";
+                rtn += line + "\n";
             }
         }
         return rtn;

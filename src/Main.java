@@ -1,4 +1,3 @@
-
 public class Main {
     public static void main(String[] args) throws Exception {
         UserIn in = new UserIn();        
@@ -28,11 +27,13 @@ public class Main {
             frank.BigStitch(0, fw.getRefTiles().get(i), dir, "Fused" + (dp.getFirstImage() + i) + "_REF.tif", out_dir);
         }
 
-        ConfigConverter cc = new ConfigConverter(dir, dp);
+        ConfigConverter cc = new ConfigConverter(dir, dp, dp.getDim());
         for(int i = 0; i < cc.getPrintList().size(); i++) {
             fw.outputBuilder2(cc.getPrintList().get(i), dp.getFirstImage() + i);
         }
 
+        System.out.println(dp.dim);
+        System.out.println(dp.getDim());
         System.out.println("Reference Images Stitched and Tile Configurations Registered Succesfully!");
         System.out.println("Would you like to proceed to Stitching full z-stacks?" +
                             "\nWARNING: Only stitch full z-stacks if you allocated additional" +
