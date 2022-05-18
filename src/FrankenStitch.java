@@ -1,4 +1,3 @@
-import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -6,38 +5,41 @@ import java.util.Map;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.BufferedReader;
 
 import ij.ImagePlus;
+import ij.IJ;
 import ij.io.FileSaver;
 import loci.plugins.BF;
 import loci.plugins.in.ImporterOptions;
+
+import stitching.CommonFunctions;
+import stitching.utils.Log;
+
 import mpicbg.models.TranslationModel2D;
 import mpicbg.models.TranslationModel3D;
 import mpicbg.stitching.Downsampler;
 import mpicbg.stitching.ImageCollectionElement;
 import mpicbg.stitching.TextFileAccess;
-import stitching.utils.Log;
-import ij.IJ;
-//import ij.io.TiffEncoder;
-import stitching.CommonFunctions;
 import mpicbg.stitching.StitchingParameters;
 import mpicbg.stitching.fusion.Fusion;
-import net.imglib2.type.numeric.integer.UnsignedByteType;
-import net.imglib2.type.numeric.integer.UnsignedShortType;
-import net.imglib2.type.numeric.real.FloatType;
 import mpicbg.stitching.ImagePlusTimePoint;
 import mpicbg.models.InvertibleBoundable;
 import mpicbg.stitching.CollectionStitchingImgLib;
 
+import net.imglib2.type.numeric.integer.UnsignedByteType;
+import net.imglib2.type.numeric.integer.UnsignedShortType;
+import net.imglib2.type.numeric.real.FloatType;
+
 public class FrankenStitch {
 	/**
 	 * @param style refers to either reference (0) or flourescence (1)
-	 * @param directory
+	 * @param directory Directory Containing
 	 * @param layoutFile
 	 * @param ds
 	 * @return
 	 */ 
-    public void BigStitch(int style, String outputFile, String directory, String fileOutName) {
+    public void BigStitch(int style, String outputFile, String directory, String fileOutName, String outDirectory) {
 		Downsampler d = null;
 		int numChannels = -1; int numTimePoints = -1;
         boolean is2d = false; boolean is3d = false;
@@ -182,31 +184,18 @@ public class FrankenStitch {
 			{
 				imp.setTitle( "Fused" );
 				//imp.show();
-                String path = directory + "/" + fileOutName;
+                String path = outDirectory + "/" + fileOutName;
                 try{
-					if (style==0) {
+					if (imp.isHyperStack()) {
+						FileSaver s = new FileSaver(imp);
+						s.saveAsTiffStack(path);
+						System.out.println(imp.isHyperStack());
+					} else {
 						FileSaver s = new FileSaver(imp);
 						s.saveAsTiff(path); 
 					}
-					if (style==1) {
-						FileSaver s = new FileSaver(imp);
-						s.saveAsTiffStack(path);
-					}
-				
-					//Works for REF Only
-                    // final TiffEncoder i = new TiffEncoder(imp.getFileInfo());
-                    // final DataOutputStream out = 
-                    //     new DataOutputStream(new BufferedOutputStream(
-                    //         new FileOutputStream(path)));
-                    // i.write(out);
-                    // out.close();
-
-					//BAD
-					// BufferedImage bf = imp.getBufferedImage();
-					// ImageIO.write(bf, "TIFF", new File(path));
-					
                 } 
-                catch(TypeNotPresentException e) {
+                catch(NullPointerException e) {
                     Log.info(e.toString());
                 }
 			}
@@ -214,10 +203,9 @@ public class FrankenStitch {
     	for ( final ImageCollectionElement element : elements )
     		element.close();
 		}
- 
-
 	}
 
+	
 	private StitchingParameters refParams() {
 		StitchingParameters s = new StitchingParameters();
 		s.fusionMethod = 0; s.regThreshold = 0.10; s.relativeThreshold = 2.50; s.absoluteThreshold = 3.50;
