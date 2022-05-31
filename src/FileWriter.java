@@ -1,23 +1,18 @@
 import java.io.PrintWriter;
-//import java.util.Scanner;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.ArrayList;
 
 public class FileWriter {
-    //private final Scanner in = new Scanner(System.in);
     private final String dir;
     private final String filename;
     private List<String> refTileList = new ArrayList<>();
     private List<String> floTileList = new ArrayList<>();
-    //private final int num_images;
     
-
     FileWriter(String dir, String filename) {
         this.dir = dir;
         this.filename = filename;
-        //this.num_images = num_images;
     }
 
     public List<String> getRefTiles() {
