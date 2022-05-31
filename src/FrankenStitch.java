@@ -16,8 +16,6 @@ import loci.plugins.in.ImporterOptions;
 import stitching.CommonFunctions;
 import stitching.utils.Log;
 
-// import mpicbg.model.TranslationModel3D;
-// import mpicbg.model.TranslationModel2D;
 import mpicbg.models.TranslationModel2D;
 import mpicbg.models.TranslationModel3D;
 import mpicbg.stitching.Downsampler;
@@ -41,7 +39,8 @@ public class FrankenStitch {
 	 * @param ds
 	 * @return
 	 */ 
-    public void BigStitch(int style, String outputFile, String directory, String fileOutName, String outDirectory) {
+    public void BigStitch(int style, String outputFile, String directory, String fileOutName, String outDirectory, 
+	boolean projected, boolean isReference, boolean saveFullStack, int slices) {
 		Downsampler d = null;
 		int numChannels = -1; int numTimePoints = -1;
         boolean is2d = false; boolean is3d = false;
@@ -185,26 +184,45 @@ public class FrankenStitch {
 			if ( imp != null )
 			{
 				imp.setTitle( "Fused" );
-				//imp.show();
                 String path = outDirectory + "/" + fileOutName;
                 try{
 					if (imp.isHyperStack()) {
+						if(projected) {
+							if(saveFullStack) {
+								FileSaver s = new FileSaver(imp);
+								s.saveAsTiffStack(path);
+							}
+							ImagePlus imp_pro = Projector.Zproject(imp, slices);
+							String refRef = path.replace("FLO", "REF");
+							ImagePlus ref = new ImagePlus(refRef);
+							ImagePlus imp_merge = Projector.SplitAndMerge(imp_pro, ref);
+							FileSaver p = new FileSaver(imp_merge);
+							p.saveAsTiff(path.replace("FLO", "PRO"));
+						} else {
+							FileSaver s = new FileSaver(imp);
+							s.saveAsTiffStack(path);
+						}
+					} else if(isReference) {
 						FileSaver s = new FileSaver(imp);
-						s.saveAsTiffStack(path);
-						System.out.println(imp.isHyperStack());
+						s.saveAsTiff(path);
 					} else {
-						FileSaver s = new FileSaver(imp);
-						s.saveAsTiff(path); 
+						String refRef = path.replace("FLO", "REF");
+						ImagePlus ref = new ImagePlus(refRef);
+						ImagePlus imp_merge = Projector.SplitAndMerge(imp, ref);
+						FileSaver s = new FileSaver(imp_merge);
+						s.saveAsTiff(path.replace("FLO", "PRO")); 
 					}
                 } 
-                catch(NullPointerException e) {
+                catch(Exception e) {
                     Log.info(e.toString());
                 }
 			}
+			imp.close();
     	// close all images
     	for ( final ImageCollectionElement element : elements )
     		element.close();
 		}
+		
 	}
 
 	
@@ -469,7 +487,6 @@ public class FrankenStitch {
     			out.println( element.getFile().getName() + "; ; (" + tmp[ 0 ] + ", " + tmp[ 1 ] + ")");
     		}
         }
-
     	out.close();		
 	}
 }

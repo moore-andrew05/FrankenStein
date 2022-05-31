@@ -24,7 +24,8 @@ public class Main {
                             "Stitching reference images...");
 
         for(int i = 0; i < fw.getRefTiles().size(); i++) {
-            frank.BigStitch(0, fw.getRefTiles().get(i), dir, "Fused" + (dp.getFirstImage() + i) + "_REF.tif", out_dir);
+            frank.BigStitch(0, fw.getRefTiles().get(i), dir, "Fused" + (dp.getFirstImage() + i) + "_REF.tif", out_dir, 
+            false, true, false, 0);
         }
 
         ConfigConverter cc = new ConfigConverter(dir, dp, dp.getDim());
@@ -40,11 +41,36 @@ public class Main {
                             " memory when running the jar." +
                             "\nYou will get a heap space error if you attempt to run without additional memory.");
         String choice = in.getInput("Press enter/return to stitch full stacks, type (e)xit to exit without stitching");
-
         if (choice.trim().toLowerCase().startsWith("e")) System.exit(-1);
+        String choice2 = in.getInput("If stitching full z-stacks, type (y)es to project and save");
+        int slices = 0;
+        boolean projected = false;
+        boolean saveStack = false;
+
+        if (choice2.trim().toLowerCase().startsWith("y")) {
+            projected = true;
+            String s_slices = in.getInput("How many z-stacks would you like to take off top and bottom of image?"  + 
+            "\n(Press enter to keep default of 0)");
+            try {
+                slices = Integer.parseInt(s_slices.trim());
+            } catch (NumberFormatException n) {
+                System.out.println("Defaults Kept.");
+            }
+            String stack_saved = in.getInput("Would you like to also save the full stitched image with z-stacks?" +
+            "\n[Not recommended if not needed as file sizes are >5GB in many cases]" +
+            "\nType (y)es to save, press enter to continue without saving");
+            if (stack_saved.trim().toLowerCase().startsWith("y")) saveStack = true;
+        }
 
         for(int i = 0; i < fw.getFloTiles().size(); i++) {
-            frank.BigStitch(1, fw.getFloTiles().get(i), dir, "Fused" + (dp.getFirstImage() + i) + "_FLO.tif", out_dir);
+            frank.BigStitch(1, fw.getFloTiles().get(i), dir, "Fused" + (dp.getFirstImage() + i) + "_FLO.tif", out_dir, 
+            projected, false, saveStack, slices);
         }
+
+        /**
+         *  Projection wanted? 
+         *      If yes, full stack also wanted?
+         *      If no Zstacks, merged reference image wanted?
+         */
     }
 }
