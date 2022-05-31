@@ -33,14 +33,20 @@ import net.imglib2.type.numeric.real.FloatType;
 
 public class FrankenStitch {
 	/**
-	 * @param style refers to either reference (0) or flourescence (1)
-	 * @param directory Directory Containing
-	 * @param layoutFile
-	 * @param ds
-	 * @return
+	 * BigStitch calls for Big parameters, this method is a shitshow
+	 * @param style refers to style of overlap
+	 * @param outputFile 
+	 * @param directory
+	 * @param fileOutName
+	 * @param outDirectory
+	 * @param projected whether user wants full z stacks to be max projected
+	 * @param isReference for running reference section
+	 * @param saveFullStack whether to save full worm z stacks
+	 * @param slices number of z stacks to take off either side.
 	 */ 
     public void BigStitch(int style, String outputFile, String directory, String fileOutName, String outDirectory, 
 	boolean projected, boolean isReference, boolean saveFullStack, int slices) {
+		
 		Downsampler d = null;
 		int numChannels = -1; int numTimePoints = -1;
         boolean is2d = false; boolean is3d = false;
@@ -235,8 +241,7 @@ public class FrankenStitch {
         s.timeSelect = 0; s.checkPeaks = 5;
 		return s;
 	}
-
-	//TODO: Check params for flourescence.
+	
 	private StitchingParameters floParams() {
 		StitchingParameters s = new StitchingParameters();
 		s.fusionMethod = 0; s.regThreshold = 0.10; s.relativeThreshold = 2.50; s.absoluteThreshold = 3.50;

@@ -33,16 +33,18 @@ public class Main {
             fw.outputBuilder2(cc.getPrintList().get(i), dp.getFirstImage() + i);
         }
 
-        System.out.println(dp.dim);
-        System.out.println(dp.getDim());
+        System.out.println("\n\n\n--------------------------------------------------");
         System.out.println("Reference Images Stitched and Tile Configurations Registered Succesfully!");
         System.out.println("Would you like to proceed to Stitching full z-stacks?" +
                             "\nWARNING: Only stitch full z-stacks if you allocated additional" +
                             " memory when running the jar." +
                             "\nYou will get a heap space error if you attempt to run without additional memory.");
         String choice = in.getInput("Press enter/return to stitch full stacks, type (e)xit to exit without stitching");
-        if (choice.trim().toLowerCase().startsWith("e")) System.exit(-1);
-        String choice2 = in.getInput("If stitching full z-stacks, type (y)es to project and save");
+        if (choice.trim().toLowerCase().startsWith("e")) { 
+            endScreen();
+            System.exit(-1);
+        }      
+        String choice2 = in.getInput("If stitching full z-stacks, type (y)es to MAX project and save");
         int slices = 0;
         boolean projected = false;
         boolean saveStack = false;
@@ -54,7 +56,7 @@ public class Main {
             try {
                 slices = Integer.parseInt(s_slices.trim());
             } catch (NumberFormatException n) {
-                System.out.println("Defaults Kept.");
+                System.out.println("\nDefaults Kept\n");
             }
             String stack_saved = in.getInput("Would you like to also save the full stitched image with z-stacks?" +
             "\n[Not recommended if not needed as file sizes are >5GB in many cases]" +
@@ -67,10 +69,18 @@ public class Main {
             projected, false, saveStack, slices);
         }
 
+        endScreen();
+
         /**
          *  Projection wanted? 
          *      If yes, full stack also wanted?
          *      If no Zstacks, merged reference image wanted?
          */
+    }
+
+    private static void endScreen() {
+        System.out.println("|---------------------------------------------|");
+        System.out.printf("|%28s%18s\n", "Finished!!", "|");
+        System.out.println("|---------------------------------------------|");
     }
 }

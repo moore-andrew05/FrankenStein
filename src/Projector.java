@@ -4,14 +4,12 @@ import ij.plugin.RGBStackMerge;
 import ij.plugin.ChannelSplitter;
 
 public class Projector {
-    public Projector(){}
-    
     public static ImagePlus Zproject(ImagePlus imp, int slices) {
         if(!imp.isHyperStack()) return null;
 
         return ZProjector.run(imp, "max", slices + 1, (imp.getStackSize() / 3) - slices);
     }
-
+    
     public static ImagePlus SplitAndMerge(ImagePlus flo, ImagePlus ref) {
         ImagePlus[] imp_split = ChannelSplitter.split(flo);
 
