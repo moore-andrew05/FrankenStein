@@ -10,7 +10,7 @@ S. Preibisch, S. Saalfeld, P. Tomancak (2009) “Globally optimal stitching of t
 
 Stitching images of later stage *c. Elegans* when taking images at higher magnification (60x or 100x) can become very tedious if done completely by hand. This program is currently specific to DeltaVision directory structures like we have. By using stage position metadata we can stitch entire images at once instead of manually moving pariwise through the image.
 
-This program will create a stitched reference image and a stitched composite image containing all original z-stacks and channels for fluorescence. These composite images can be very large (10 GB+) so additional post processing such as projecting will likely be required to be performed manually (Additional functionality coming soon).
+This program will create a stitched reference image and a stitched composite image containing all original z-stacks and channels for fluorescence if desired. These composite images can be very large (10 GB+) so additional post processing such as projecting and merging with reference images can automatically be performed if desired. 
 
 ### *Installation and Running*
 
