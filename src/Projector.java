@@ -1,12 +1,12 @@
 import ij.plugin.ZProjector;
+import ij.IJ;
 import ij.ImagePlus;
 import ij.plugin.RGBStackMerge;
 import ij.plugin.ChannelSplitter;
 
+
 public class Projector {
     public static ImagePlus Zproject(ImagePlus imp, int slices) {
-        if(!imp.isHyperStack()) return null;
-
         return ZProjector.run(imp, "max", slices + 1, (imp.getStackSize() / 3) - slices);
     }
     
@@ -20,6 +20,9 @@ public class Projector {
             full_stack[i] = imp_split[i];
         }
         full_stack[n] = ref;
+        if(full_stack.length < 3) {
+            IJ.run(full_stack[0], "Green", "");
+        }
         return RGBStackMerge.mergeChannels(full_stack, false);
     }
 

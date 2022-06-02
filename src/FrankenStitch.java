@@ -26,7 +26,6 @@ import mpicbg.stitching.fusion.Fusion;
 import mpicbg.stitching.ImagePlusTimePoint;
 import mpicbg.models.InvertibleBoundable;
 import mpicbg.stitching.CollectionStitchingImgLib;
-
 import net.imglib2.type.numeric.integer.UnsignedByteType;
 import net.imglib2.type.numeric.integer.UnsignedShortType;
 import net.imglib2.type.numeric.real.FloatType;
@@ -44,9 +43,9 @@ public class FrankenStitch {
 	 * @param saveFullStack whether to save full worm z stacks
 	 * @param slices number of z stacks to take off either side.
 	 */ 
+
     public void BigStitch(int style, String outputFile, String directory, String fileOutName, String outDirectory, 
 	boolean projected, boolean isReference, boolean saveFullStack, int slices) {
-		
 		Downsampler d = null;
 		int numChannels = -1; int numTimePoints = -1;
         boolean is2d = false; boolean is3d = false;
@@ -187,12 +186,13 @@ public class FrankenStitch {
 			
 			Log.info( "Finished fusion (" + (System.currentTimeMillis() - time) + " ms)");
 			Log.info( "Finished ... (" + (System.currentTimeMillis() - startTime) + " ms)");
+			
 			if ( imp != null )
 			{
 				imp.setTitle( "Fused" );
                 String path = outDirectory + "/" + fileOutName;
                 try{
-					if (imp.isHyperStack()) {
+					if (imp.isHyperStack() || !isReference && (imp.getStackSize() / 3) > 1) {
 						if(projected) {
 							if(saveFullStack) {
 								FileSaver s = new FileSaver(imp);
@@ -204,6 +204,7 @@ public class FrankenStitch {
 							ImagePlus imp_merge = Projector.SplitAndMerge(imp_pro, ref);
 							FileSaver p = new FileSaver(imp_merge);
 							p.saveAsTiff(path.replace("FLO", "PRO"));
+							
 						} else {
 							FileSaver s = new FileSaver(imp);
 							s.saveAsTiffStack(path);

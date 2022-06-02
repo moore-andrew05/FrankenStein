@@ -1,15 +1,19 @@
+
 public class Main {
     public static void main(String[] args) throws Exception {
+        startScreen();
+        
         UserIn in = new UserIn();        
 
         String dir = in.getInput("Enter log file directory (Tile Configuration Files will be saved here as well)");
         String out_dir = in.getInput("Enter output directory (Stitched images will be saved here)");
         String out_name = in.getInput("Enter configuration file name" + 
         " (Will be incremented based on # of images in folder) \n[Do not add .txt to end]");
-
+        long start = System.currentTimeMillis();
         dirParser dp = new dirParser(dir);
         FileReader fr = new FileReader(dir, dp);
         FileWriter fw = new FileWriter(out_dir, out_name);
+        
 
         dp.bigCleaner(dp.getrawFileList());
         
@@ -32,7 +36,7 @@ public class Main {
         for(int i = 0; i < cc.getPrintList().size(); i++) {
             fw.outputBuilder2(cc.getPrintList().get(i), dp.getFirstImage() + i);
         }
-
+        long t1 = System.currentTimeMillis();
         System.out.println("\n\n\n--------------------------------------------------");
         System.out.println("Reference Images Stitched and Tile Configurations Registered Succesfully!");
         System.out.println("Would you like to proceed to Stitching full z-stacks?" +
@@ -40,6 +44,9 @@ public class Main {
                             " memory when running the jar." +
                             "\nYou will get a heap space error if you attempt to run without additional memory.");
         String choice = in.getInput("Press enter/return to stitch full stacks, type (e)xit to exit without stitching");
+        System.out.println(fr.getPrintList());
+        System.out.println(dp.cleanfileList);
+        System.out.println(fw.getFloTiles());
         if (choice.trim().toLowerCase().startsWith("e")) { 
             endScreen();
             System.exit(-1);
@@ -63,11 +70,15 @@ public class Main {
             "\nType (y)es to save, press enter to continue without saving");
             if (stack_saved.trim().toLowerCase().startsWith("y")) saveStack = true;
         }
-
+        long t2 = System.currentTimeMillis();
         for(int i = 0; i < fw.getFloTiles().size(); i++) {
             frank.BigStitch(1, fw.getFloTiles().get(i), dir, "Fused" + (dp.getFirstImage() + i) + "_FLO.tif", out_dir, 
             projected, false, saveStack, slices);
         }
+
+        long stop = System.currentTimeMillis();
+        long sub = t2 - t1;
+        timeTaken(start, stop, sub);
 
         endScreen();
 
@@ -79,8 +90,35 @@ public class Main {
     }
 
     private static void endScreen() {
-        System.out.println("|---------------------------------------------|");
-        System.out.printf("|%28s%18s\n", "Finished!!", "|");
-        System.out.println("|---------------------------------------------|");
+        System.out.println("       +==========================================================+\n" +
+        String.format("       |%34s%25s\n", "Finished!!", "|") + 
+        "       +==========================================================+\n");
+    }
+
+    private static void startScreen() {
+        System.out.println(
+        "       +==========================================================+\n" +
+        "                  ______               _              \n" +
+        "                 |  ____|             | |             \n" +
+        "                 | |__ _ __ __ _ _ __ | | _____ _ __  \n" +
+        "                 |  __| '__/ _` | '_ \\| |/ / _ \\ '_ \\ \n" +
+        "                 | |  | | | (_| | | | |   <  __/ | | |\n" +
+        "                 |_|  |_|  \\__,_|_| |_|_|\\_\\___|_| |_|\n" +
+        "                           _____ _       _            \n" +
+        "                          / ____| |     (_)    v1.1.1 \n" +
+        "                         | (___ | |_ ___ _ _ __       \n" +
+        "                          \\___ \\| __/ _ \\ | '_ \\      \n" +
+        "                          ____) | ||  __/ | | | |    \n" +
+        "                         |_____/ \\__\\___|_|_| |_| \n" +
+        "       +==========================================================+\n\n");
+    }
+
+    private static void timeTaken(long start, long stop, long sub) {
+        long dif = stop - start - sub;
+        int tsecs = (int) dif / 1000;
+        int mins = tsecs / 60;
+        int secs = tsecs % 60;
+        
+        System.out.printf("Time Elapsed: %d mins, %d secs\n", mins, secs);
     }
 }
