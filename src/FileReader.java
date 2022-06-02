@@ -7,23 +7,26 @@ import java.util.List;
 
 public class FileReader {
     private final String indicator = "Stage coordinates";
+    private final String indicator2 = "Pixel Size:";
     private final String directory;// = "Z:/Jessica/Live_Bacterial_Imaging/20220329_CL2122worms";
     private final int dim = 2;
-    //private final String name = "image";
     private List<String> printList = new ArrayList<String>();
-    private final double factor = 9.330099;//9.27550915;
+    private double factor = 0;//9.27550915;
     private dirParser parsed; 
 
     FileReader(String directory, dirParser parsed){
         this.directory=directory;
         this.parsed = parsed;
     }
+    
+    public List<String> printList() {
+        return printList;
+    }
 
     public List<String> getPrintList() {
         return printList;
     }
     
-
     //Reads in the REF log file and returns only the line with the Stage coordinates
     private String lineReader(String filename) {
         try{
@@ -31,6 +34,12 @@ public class FileReader {
             while(in.hasNextLine()) {
                 String line = in.nextLine();
                 //System.out.println(line);
+                if(line.contains(indicator2)) {
+                    String nums = line.substring(line.indexOf(":") + 1, line.length() - 1).trim();
+                    String[] nums2 = nums.split(" ");
+                    double num = Double.parseDouble(nums2[0]);
+                    this.factor = 1 / num;
+                }
                 if(line.contains(indicator)) {
                     //System.out.println(line);
                     return line;
