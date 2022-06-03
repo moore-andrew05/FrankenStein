@@ -1,5 +1,7 @@
 # **FrankenStein (Or Frankenstein's Monster)**
 
+Created by Andrew Moore
+
 ### **Built around FIJI Stitching Plugin** 
 S. Preibisch, S. Saalfeld, P. Tomancak (2009) “Globally optimal stitching of tiled 3D microscopic image acquisitions”, Bioinformatics, 25(11):1463-1465.
 
@@ -8,7 +10,7 @@ S. Preibisch, S. Saalfeld, P. Tomancak (2009) “Globally optimal stitching of t
 
 ### ***What is this for?***
 
-Stitching images of later stage *c. Elegans* when taking images at higher magnification (60x or 100x) can become very tedious if done completely by hand. This program is currently specific to DeltaVision directory structures like we have. By using stage position metadata we can stitch entire images at once instead of manually moving pariwise through the image.
+Stitching images of later stage *c. Elegans* when taking images at higher magnification (60x or 100x) can become very tedious if done completely by hand. Because of the worm's shape, taking grid style images for merging is inefficient and wasteful. By using stage position metadata we can stitch entire images at once instead of manually moving pariwise through the image. This program is currently specific to DeltaVision directory structures and log files.
 
 This program will create a stitched reference image and a stitched composite image containing all original z-stacks and channels for fluorescence if desired. These composite images can be very large (10 GB+) so additional post processing such as projecting and merging with reference images can automatically be performed if desired. 
 
@@ -26,4 +28,4 @@ Follow the prompts in the program and you should have stitched images!
 
 ### *Known Bugs*
 
-If the program is run multiple times on the same directory and different tile names are used, there will be some errors thrown by java. These errors do not affect the actual stitching, but if you have to run multiple times on the same directory use the same Tile name.
+***Probably Fixed:*** If the program is run multiple times on the same directory and different tile names are used, there will be some errors thrown by java. These errors do not affect the actual stitching, but if you have to run multiple times on the same directory use the same Tile name.

@@ -8,10 +8,10 @@ import java.util.List;
 public class FileReader {
     private final String indicator = "Stage coordinates";
     private final String indicator2 = "Pixel Size:";
-    private final String directory;// = "Z:/Jessica/Live_Bacterial_Imaging/20220329_CL2122worms";
+    private final String directory;
     private final int dim = 2;
     private List<String> printList = new ArrayList<String>();
-    private double factor = 0;//9.27550915;
+    private double factor = 0;
     private dirParser parsed; 
 
     FileReader(String directory, dirParser parsed){
@@ -33,7 +33,6 @@ public class FileReader {
             Scanner in = new Scanner(new File(filename));
             while(in.hasNextLine()) {
                 String line = in.nextLine();
-                //System.out.println(line);
                 if(line.contains(indicator2)) {
                     String nums = line.substring(line.indexOf(":") + 1, line.length() - 1).trim();
                     String[] nums2 = nums.split(" ");
@@ -41,7 +40,6 @@ public class FileReader {
                     this.factor = 1 / num;
                 }
                 if(line.contains(indicator)) {
-                    //System.out.println(line);
                     return line;
                 }
             }
@@ -79,6 +77,9 @@ public class FileReader {
             tileFormat += (dir.get(i).substring(0, dir.get(i).lastIndexOf(".")) + "; ; " 
             + String.format("(%.2f, %.2f)\n", (Double.parseDouble(coords[0]) * factor * -1.0), 
             (Double.parseDouble(coords[1]) * factor)));   
+        }
+        if(tileFormat.length() < 10) {
+            tileFormat = "ERROR";
         }
         printList.add(tileFormat);
     }
