@@ -123,9 +123,4 @@ public class dirParser {
             cleanfileList.add(tmp);
         }
     }
-
-    public static void main(String[] args) {
-        dirParser d = new dirParser("E:/local_files/Stitching/20220328_CL2122worms");
-        System.out.println(d.getDim());
-    }
 }

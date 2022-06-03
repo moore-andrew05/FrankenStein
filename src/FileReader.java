@@ -89,38 +89,4 @@ public class FileReader {
             builder(big_list.get(i));
         }
     }
-
-
-
-    public static void main(String[] args) {
-        //FileReader test = new FileReader();
-        //dirParser test1 = new dirParser("Z:/Jessica/Live_Bacterial_Imaging/20220328_CL2122worms");
-        // System.out.println(Arrays.toString(test1.getrawFileList()));
-        // test.looper(test1.getrawFileList());
-        // test1.bigCleaner(test1.getrawFileList());
-        // for (int i = 0; i < test1.getcleanfileList().size(); i++) {
-        //     System.out.println(test.looper(test1.getcleanfileList().get(i)));
-        // }
-
-
-        //System.out.println(test.cleaner("image1_1_R3D_REF.dv.log")[1]);
-        /*
-        Scanner userIn = new Scanner(System.in);
-        System.out.println("Please enter image number: ");
-        int image_n = userIn.nextInt();
-        System.out.println("Enter first point: ");
-        int f = userIn.nextInt();
-        System.out.println("Enter last point");
-        int x = userIn.nextInt();
-        userIn.close();
-        */
-        /*
-        for (int i = f; i <= x; i++) {
-            String filename = "image" + image_n + "_" + i + "_R3D_REF.dv.log";
-            System.out.println(Arrays.toString(test.cleaner(filename)));
-        }
-        */
-        
-    }
-
 }

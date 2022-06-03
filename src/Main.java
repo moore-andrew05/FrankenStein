@@ -13,14 +13,12 @@ public class Main {
         dirParser dp = new dirParser(dir);
         FileReader fr = new FileReader(dir, dp);
         FileWriter fw = new FileWriter(out_dir, out_name);
-        
 
         dp.bigCleaner(dp.getrawFileList());
         
         fr.looper(dp.getcleanfileList());
-        for(int i = 1; i <= fr.getPrintList().size(); i++) {
-            //System.out.println(fr.getPrintList().get(i));
-            fw.outputBuilder(fr.getPrintList().get(i-1), dp.getFirstImage() - 1 + i);
+        for(int i = 0; i < fr.getPrintList().size(); i++) {
+            fw.outputBuilder(fr.getPrintList().get(i), dp.getFirstImage() + i);
         }
 
         FrankenStitch frank = new FrankenStitch();
@@ -32,10 +30,12 @@ public class Main {
             false, true, false, 0);
         }
 
-        ConfigConverter cc = new ConfigConverter(dir, dp, dp.getDim());
+        ConfigConverter cc = new ConfigConverter(dir, dp.getDim(), fw.getRefTiles());
+        
         for(int i = 0; i < cc.getPrintList().size(); i++) {
             fw.outputBuilder2(cc.getPrintList().get(i), dp.getFirstImage() + i);
         }
+        
         long t1 = System.currentTimeMillis();
         System.out.println("\n\n\n--------------------------------------------------");
         System.out.println("Reference Images Stitched and Tile Configurations Registered Succesfully!");
@@ -44,9 +44,7 @@ public class Main {
                             " memory when running the jar." +
                             "\nYou will get a heap space error if you attempt to run without additional memory.");
         String choice = in.getInput("Press enter/return to stitch full stacks, type (e)xit to exit without stitching");
-        System.out.println(fr.getPrintList());
-        System.out.println(dp.cleanfileList);
-        System.out.println(fw.getFloTiles());
+        
         if (choice.trim().toLowerCase().startsWith("e")) { 
             endScreen();
             System.exit(-1);
@@ -115,9 +113,9 @@ public class Main {
 
     private static void timeTaken(long start, long stop, long sub) {
         long dif = stop - start - sub;
-        int tsecs = (int) dif / 1000;
-        int mins = tsecs / 60;
-        int secs = tsecs % 60;
+        long tsecs = dif / 1000;
+        int mins = (int) tsecs / 60;
+        int secs = (int) tsecs % 60;
         
         System.out.printf("Time Elapsed: %d mins, %d secs\n", mins, secs);
     }
