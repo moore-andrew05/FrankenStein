@@ -28,6 +28,14 @@ public class ConfigConverter {
         }
     }
 
+    private List<String> listBuilder2(List<String> in) {
+        List<String> out = new ArrayList<>();
+        for(String s: in) {
+            out.add(s.replace(".txt", "_flo.txt"));
+        }
+        return out;
+    }
+
     public List<String> getPrintList() {
         return printList;
     }
@@ -50,6 +58,8 @@ public class ConfigConverter {
                 } else {
                     rtn += line.replaceAll("_REF", "") + "\n";
                 }
+            } else if(line.equals("ERROR")) {
+                rtn = "ERROR";
             } else {
                 rtn += line + "\n";
             }
@@ -68,8 +78,22 @@ public class ConfigConverter {
             return new Scanner(new File(dir + "/" + filename));
         }catch (FileNotFoundException e) {
             System.out.println(e);
-            return new Scanner("Hi, I'm a Tile file that shouldn't be here\n" +
-            "I don't do anything and I don't break anything, so I'm going to stay for now");
+            return new Scanner("ERROR");
+            // "\n\n" +
+            // "#Hi, I'm a Tile file that shouldn't be here\n" +
+            // "#I don't do anything and I don't break anything, so I'm going to stay for now");
+        }
+    }
+
+    public void dirCleaner() {
+        List<String> tiles = refTiles;
+        List<String> flo_tiles = listBuilder2(refTiles);
+        List<String> reg_tiles = files;
+        for(int i = 0; i < tiles.size(); i++) {
+            File[] filepaths = {new File(dir + "/" + tiles.get(i)), new File(dir + "/" + flo_tiles.get(i)), new File(dir + "/" + reg_tiles.get(i))};
+            for(File f: filepaths) {
+                f.delete();
+            }
         }
     }
 }
