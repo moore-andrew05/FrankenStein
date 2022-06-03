@@ -80,6 +80,9 @@ public class FileReader {
             + String.format("(%.2f, %.2f)\n", (Double.parseDouble(coords[0]) * factor * -1.0), 
             (Double.parseDouble(coords[1]) * factor)));   
         }
+        if(tileFormat.length() < 10) {
+            tileFormat = "ERROR";
+        }
         printList.add(tileFormat);
     }
 
