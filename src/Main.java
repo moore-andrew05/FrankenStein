@@ -5,10 +5,10 @@ public class Main {
         
         UserIn in = new UserIn();        
 
-        String dir = in.getInput("Enter log file directory (Tile Configuration Files will be saved here as well)");
+        String dir = in.getInput("Enter Image Directory");
         String out_dir = in.getInput("Enter output directory (Stitched images will be saved here)");
         String out_name = in.getInput("Enter configuration file name" + 
-        " (Will be incremented based on # of images in folder) \n[Do not add .txt to end]");
+        " (Will be incremented based on # of images in folder) \n[Do not add .txt or an incrementor to end]");
         long start = System.currentTimeMillis();
         dirParser dp = new dirParser(dir);
         FileReader fr = new FileReader(dir, dp);
@@ -25,15 +25,16 @@ public class Main {
         System.out.println("Config Files Built! \n" +
                             "Stitching reference images...");
 
+        fw.imgNumbers();
         for(int i = 0; i < fw.getRefTiles().size(); i++) {
-            frank.BigStitch(0, fw.getRefTiles().get(i), dir, "Fused" + (dp.getFirstImage() + i) + "_REF.tif", out_dir, 
+            frank.BigStitch(0, fw.getRefTiles().get(i), dir, "Fused" + (fw.getImgNumbers().get(i)) + "_REF.tif", out_dir, 
             false, true, false, 0);
         }
 
-        ConfigConverter cc = new ConfigConverter(dir, dp.getDim(), fw.getRefTiles());
+        ConfigConverter cc = new ConfigConverter(out_dir, dp.getDim(), fw.getRefTiles());
         
         for(int i = 0; i < cc.getPrintList().size(); i++) {
-            fw.outputBuilder2(cc.getPrintList().get(i), dp.getFirstImage() + i);
+            fw.outputBuilder2(cc.getPrintList().get(i), fw.getImgNumbers().get(i));
         }
         
         long t1 = System.currentTimeMillis();
@@ -70,26 +71,21 @@ public class Main {
         }
         long t2 = System.currentTimeMillis();
         for(int i = 0; i < fw.getFloTiles().size(); i++) {
-            frank.BigStitch(1, fw.getFloTiles().get(i), dir, "Fused" + (dp.getFirstImage() + i) + "_FLO.tif", out_dir, 
+            frank.BigStitch(1, fw.getFloTiles().get(i), dir, "Fused" + (fw.getImgNumbers().get(i)) + "_FLO.tif", out_dir, 
             projected, false, saveStack, slices);
         }
+        cc.dirCleaner();
 
         long stop = System.currentTimeMillis();
         long sub = t2 - t1;
         timeTaken(start, stop, sub);
 
         endScreen();
-
-        /**
-         *  Projection wanted? 
-         *      If yes, full stack also wanted?
-         *      If no Zstacks, merged reference image wanted?
-         */
     }
 
     private static void endScreen() {
         System.out.println("       +==========================================================+\n" +
-        String.format("       |%34s%25s\n", "Finished!!", "|") + 
+        String.format("       |%34s%25s\n", "Finished!!", "|") +
         "       +==========================================================+\n");
     }
 
@@ -117,6 +113,6 @@ public class Main {
         int mins = (int) tsecs / 60;
         int secs = (int) tsecs % 60;
         
-        System.out.printf("Time Elapsed: %d mins, %d secs\n", mins, secs);
+        System.out.printf("\nTime Elapsed: %d mins, %d secs\n", mins, secs);
     }
 }

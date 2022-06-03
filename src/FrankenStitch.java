@@ -51,7 +51,7 @@ public class FrankenStitch {
         boolean is2d = false; boolean is3d = false;
 		final long startTime = System.currentTimeMillis();
 		StitchingParameters params = new StitchingParameters();
-		ArrayList<ImageCollectionElement> elements = getLayoutFromFile(directory, outputFile, d);
+		ArrayList<ImageCollectionElement> elements = getLayoutFromFile(directory, outDirectory, outputFile, d);
 		if (style==0) { params = refParams();} 
 		if (style==1) { params = floParams();}
 
@@ -131,7 +131,7 @@ public class FrankenStitch {
             else
                 outputFile = outputFile + ".registered.txt";
                 
-            writeRegisteredTileConfiguration( new File( directory, outputFile ), elements );
+            writeRegisteredTileConfiguration( new File( outDirectory, outputFile ), elements );
         }
 
         if ( params.fusionMethod != CommonFunctions.fusionMethodListGrid.length - 1 )
@@ -253,7 +253,7 @@ public class FrankenStitch {
 		return s;
 	}
 
-    public ArrayList< ImageCollectionElement > getLayoutFromFile( final String directory, final String layoutFile, final Downsampler ds )
+    public ArrayList< ImageCollectionElement > getLayoutFromFile( final String inDirectory, final String outDirectory, final String layoutFile, final Downsampler ds )
 	{
 		final ArrayList< ImageCollectionElement > elements = new ArrayList< ImageCollectionElement >();
 		int dim = -1;
@@ -268,9 +268,9 @@ public class FrankenStitch {
 		Map<String, ImagePlus[]> multiSeriesMap = new HashMap<String, ImagePlus[]>();
 		String pfx = "Stitching_Grid.getLayoutFromFile: ";
 		try {
-			final BufferedReader in = TextFileAccess.openFileRead( new File( directory, layoutFile ) );
+			final BufferedReader in = TextFileAccess.openFileRead( new File( outDirectory, layoutFile ) );
 			if ( in == null ) {
-				Log.error(pfx + "Cannot find tileconfiguration file '" + new File( directory, layoutFile ).getAbsolutePath() + "'");
+				Log.error(pfx + "Cannot find tileconfiguration file '" + new File( outDirectory, layoutFile ).getAbsolutePath() + "'");
 				return null;
 			}
 			int lineNo = 0;
@@ -372,7 +372,7 @@ public class FrankenStitch {
 						
 						// now we can assemble the ImageCollectionElement:
 						ImageCollectionElement element = new ImageCollectionElement(
-								new File( directory, imageName ), index++ );
+								new File( inDirectory, imageName ), index++ );
 						element.setDimensionality( dim );
 						if ( dim == 3 )
 							element.setModel( new TranslationModel3D() );
