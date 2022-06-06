@@ -14,7 +14,7 @@ public class Main {
         FileReader fr = new FileReader(dir, dp);
         FileWriter fw = new FileWriter(out_dir, out_name);
 
-        dp.bigCleaner(dp.getrawFileList());
+        //dp.bigCleaner(dp.getrawFileList());
         
         fr.looper(dp.getcleanfileList());
         for(int i = 0; i < fr.getPrintList().size(); i++) {
@@ -31,7 +31,7 @@ public class Main {
             false, true, false, 0);
         }
 
-        ConfigConverter cc = new ConfigConverter(out_dir, dp.getDim(), fw.getRefTiles());
+        ConfigConverter cc = new ConfigConverter(out_dir, dp.getDims(), fw.getRefTiles());
         
         for(int i = 0; i < cc.getPrintList().size(); i++) {
             fw.outputBuilder2(cc.getPrintList().get(i), fw.getImgNumbers().get(i));

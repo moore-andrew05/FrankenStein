@@ -9,11 +9,11 @@ public class ConfigConverter {
     File dir;
     List<String> refTiles = new ArrayList<>();
     List<String> printList = new ArrayList<>();
-    int dim;
+    List<Integer> dims = new ArrayList<>();
     List<String> files = new ArrayList<>();
 
-    public ConfigConverter(String dir, int dim, List<String> refTiles) {
-        this.dim = dim;
+    public ConfigConverter(String dir, List<Integer> dims, List<String> refTiles) {
+        this.dims = dims;
         this.dir = new File(dir);
         this.refTiles = refTiles;
         listBuilder();
@@ -44,7 +44,7 @@ public class ConfigConverter {
         return files;
     }
 
-    private String builder(String filename) {
+    private String builder(String filename, int dim) {
         Scanner file = fileOpen(filename);
         String rtn = "";
         while(file.hasNextLine()) {
@@ -52,7 +52,7 @@ public class ConfigConverter {
             if(line.startsWith("dim") && dim == 3) {
                 rtn += "dim = 3\n";
             } else if(line.startsWith("image")) {
-                if (this.dim == 3) {
+                if (dim == 3) {
                     String edited = line.substring(0, line.length() - 1) + ", 0.0)\n";
                     rtn += edited.replaceAll("_REF", "");
                 } else {
@@ -68,8 +68,8 @@ public class ConfigConverter {
     }
 
     private void looper(List<String> files) {
-        for (String s : files) {
-            printList.add(builder(s));
+        for (int i = 0; i < files.size(); i++) {
+            printList.add(builder(files.get(i), dims.get(i)));
         }
     }
 
