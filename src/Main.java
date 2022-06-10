@@ -7,8 +7,9 @@ public class Main {
 
         String dir = in.getInput("Enter Image Directory");
         String out_dir = in.getInput("Enter output directory (Stitched images will be saved here)");
-        String out_name = in.getInput("Enter configuration file name" + 
-        " (Will be incremented based on # of images in folder) \n[Do not add .txt or an incrementor to end]");
+        //String out_name = in.getInput("Enter configuration file name" + 
+        //" (Will be incremented based on # of images in folder) \n[Do not add .txt or an incrementor to end]");
+        final String out_name = "Tile";
         long start = System.currentTimeMillis();
         dirParser dp = new dirParser(dir);
         FileReader fr = new FileReader(dir, dp);
@@ -47,6 +48,7 @@ public class Main {
         String choice = in.getInput("Press enter/return to stitch full stacks, type (e)xit to exit without stitching");
         
         if (choice.trim().toLowerCase().startsWith("e")) { 
+            cc.dirCleaner();
             endScreen();
             System.exit(-1);
         }      
@@ -99,7 +101,7 @@ public class Main {
         "                 | |  | | | (_| | | | |   <  __/ | | |\n" +
         "                 |_|  |_|  \\__,_|_| |_|_|\\_\\___|_| |_|\n" +
         "                           _____ _       _            \n" +
-        "                          / ____| |     (_)    v1.1.2 \n" +
+        "                          / ____| |     (_)    v1.1.3 \n" +
         "                         | (___ | |_ ___ _ _ __       \n" +
         "                          \\___ \\| __/ _ \\ | '_ \\      \n" +
         "                          ____) | ||  __/ | | | |    \n" +

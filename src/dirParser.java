@@ -36,6 +36,7 @@ public class dirParser {
         findDims();
     }
 
+    
     private void findDims() {
         String last_img = "";
         for(int i = 0; i < getcleanfileList().size(); i++) {
@@ -128,7 +129,9 @@ public class dirParser {
                     tmp.add(files[k]);
                 }
             }
-            cleanfileList.add(tmp);
+            if(tmp.size() > 1) {
+                cleanfileList.add(tmp);
+            }
         }
     }
 
