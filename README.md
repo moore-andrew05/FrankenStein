@@ -25,7 +25,3 @@ Replace {version} with the downloaded version, your command line argument should
 *Note: The Xmx command specifies the max heap space available to the Java VM, depending on the size of the images being worked with, java will very quickly run out of heap space, requiring that we allocate more memory. The example above allocates 14Gb of memory. Some image sets may require up to ~30Gb. Even if you do not have the required amount of physical memory in your system, you may be able to set the Xmx high enough as it utilizes virtual memory. This will significantly slow the performance of the program, but will allow the program to complete. Regardless, if you get a java heap space error at any point, rerun the program with higher memory allocation.*
 
 Follow the prompts in the program and you should have stitched images!
-
-### *Known Bugs*
-
-***Probably Fixed:*** If the program is run multiple times on the same directory and different tile names are used, there will be some errors thrown by java. These errors do not affect the actual stitching, but if you have to run multiple times on the same directory use the same Tile name.
