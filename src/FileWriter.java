@@ -7,6 +7,7 @@ import java.util.ArrayList;
 public class FileWriter {
     private final String dir;
     private final String filename;
+    private final String TILE_NAME = "Tile";
     private List<String> refTileList = new ArrayList<>();
     private List<String> floTileList = new ArrayList<>();
     private List<Integer> imgNumbers = new ArrayList<>();
@@ -30,7 +31,7 @@ public class FileWriter {
 
     public void imgNumbers() {
         for(String s: refTileList) {
-            String tmp = s.replace("Tile", "");
+            String tmp = s.replace(TILE_NAME, "");
             tmp = tmp.replace(".txt", "");
             imgNumbers.add(Integer.parseInt(tmp));
         }

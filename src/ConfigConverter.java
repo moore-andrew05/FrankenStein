@@ -64,6 +64,7 @@ public class ConfigConverter {
                 rtn += line + "\n";
             }
         }
+        file.close();
         return rtn;
     }
 
