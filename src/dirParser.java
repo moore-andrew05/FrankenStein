@@ -17,6 +17,7 @@ public class dirParser {
     int first_img;
     int last_img;
     final String fileName;
+    boolean hasLeadingZeroes = false;
 
     FilenameFilter refLogFilter = new FilenameFilter() {
         public boolean accept(File f, String name)
@@ -41,14 +42,23 @@ public class dirParser {
 
     dirParser(String dir, String out_dir, String fileName) {
         this.dir = new File(dir);
-        this.fileName = fileName;
+        this.fileName = fileName.toLowerCase();
         this.out_dir = new File(out_dir);
         rawfileList = this.dir.list(refLogFilter);
         existingFused = Arrays.asList(this.out_dir.list(existingFilter));
+        leadingZeroes();
         this.first_img = findFirstImage();
         this.last_img = findLastImage();
         bigCleaner(rawfileList);
         findDims();
+    }
+
+    /**
+     * checks if given images have incrementors with leading zeroes.
+     */
+    private void leadingZeroes() {
+        String s = rawfileList[0].substring(fileName.length());
+        if (s.startsWith("0")) hasLeadingZeroes = true;
     }
     
     /**
@@ -157,6 +167,8 @@ public class dirParser {
         int last = getLastImage();
         for(int i = 0; i < last; i++) {
             String checker = fileName + (i+1) + "_";
+            if(hasLeadingZeroes && i < 9) checker = fileName + "0" + (i+1) + "_";
+            System.out.println(checker);
             List<String> tmp = new ArrayList<String>();
             for(int k = 0; k < files.length; k++) {
                 if (files[k].toLowerCase().startsWith(checker)) {
@@ -166,6 +178,10 @@ public class dirParser {
             if(tmp.size() > 1) {
                 cleanfileList.add(tmp);
             }
+        }
+        if (cleanfileList.isEmpty()) {
+            System.out.println("Files Not Found, Check that your filename is correct!");
+            System.exit(-1);
         }
     }
 }
