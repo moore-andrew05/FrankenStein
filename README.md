@@ -28,9 +28,9 @@ Follow the prompts in the program and you should have stitched images!
 
 ### *Tips for Naming Images*
 
-DeltaVision images with multiple tiles are incremented using two seperate incrementors following the image name and separated by an underscore (e.g. "image1_1..."; the two incrementors are 1_1). The program will ask for your image names at the start. If your files were named like the previous example, image1_1, you will just plug in "image" for the file names when prompted.
+DeltaVision images with multiple tiles are incremented using two seperate incrementors following the image name and separated by an underscore. (e.g. "image1_1..."; the two incrementors are 1_1). The first incrementor is for each "image", or set of points; the second tracks the number of points in a single image (Note: the second incrementor will not always start with 1 depending on how you set the points up when you image). The program will ask for your image names at the start. If your files were named like the previous example, image1_1, you will just plug in "image" for the file names when prompted.
 
-You should be able to name your images anything without throwing an error, but there may be errors if your filenames are especially "challenging"; not all cases have been tested. Importantly, the image names without the incrementor must all be the same in a single directory. If you need different image names, use a separate directory and run the program twice.
+You should be able to name your images anything without throwing an error, but there may be errors if your filenames are especially "challenging"; not all cases have been tested. Importantly, the image names not including the incrementor must all be the same in a single directory. If you need different image names, use a separate directory and run the program twice.
 
 ### *Known Issues*
 
