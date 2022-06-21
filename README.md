@@ -35,5 +35,6 @@ You should be able to name your images anything without throwing an error, but t
 ### *Known Issues*
 
 -Directories with only one image may not work.
+
 -If only reference images are present, the program will throw an error. Images will be stitched properly but Tile configs will not be cleaned up.
 
