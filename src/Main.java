@@ -7,13 +7,15 @@ public class Main {
 
         String dir = in.getInput("Enter Image Directory");
         String out_dir = in.getInput("Enter output directory (Stitched images will be saved here)");
-        //String out_name = in.getInput("Enter configuration file name" + 
-        //" (Will be incremented based on # of images in folder) \n[Do not add .txt or an incrementor to end]");
-        final String out_name = "Tile";
+        System.out.println("\nIf you are unclear on what to input for image names, see the README on github.\n");
+        String fileName = in.getInput("Enter the name of the images (do not include incrementors)").trim();
+        
+        final String OUT_NAME = "Tile";
         long start = System.currentTimeMillis();
-        dirParser dp = new dirParser(dir);
+        
+        dirParser dp = new dirParser(dir, out_dir, fileName);
         FileReader fr = new FileReader(dir, dp);
-        FileWriter fw = new FileWriter(out_dir, out_name);
+        FileWriter fw = new FileWriter(out_dir, OUT_NAME);
 
         //dp.bigCleaner(dp.getrawFileList());
         
@@ -73,8 +75,11 @@ public class Main {
         }
         long t2 = System.currentTimeMillis();
         for(int i = 0; i < fw.getFloTiles().size(); i++) {
-            frank.BigStitch(1, fw.getFloTiles().get(i), dir, "Fused" + (fw.getImgNumbers().get(i)) + "_FLO.tif", out_dir, 
-            projected, false, saveStack, slices);
+            String name = "Fused" + fw.getImgNumbers().get(i) + "_FLO.tif";
+            if(!dp.getExistingFused().contains(name)) {
+                frank.BigStitch(1, fw.getFloTiles().get(i), dir, name, out_dir, 
+                projected, false, saveStack, slices);
+            }
         }
         cc.dirCleaner();
 
@@ -101,7 +106,7 @@ public class Main {
         "                 | |  | | | (_| | | | |   <  __/ | | |\n" +
         "                 |_|  |_|  \\__,_|_| |_|_|\\_\\___|_| |_|\n" +
         "                           _____ _       _            \n" +
-        "                          / ____| |     (_)    v1.1.3 \n" +
+        "                          / ____| |     (_)    v1.1.4 \n" +
         "                         | (___ | |_ ___ _ _ __       \n" +
         "                          \\___ \\| __/ _ \\ | '_ \\      \n" +
         "                          ____) | ||  __/ | | | |    \n" +

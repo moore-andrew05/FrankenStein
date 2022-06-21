@@ -2,6 +2,7 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
+
 import java.util.List;
 import java.util.ArrayList;
 
@@ -80,18 +81,22 @@ public class ConfigConverter {
         }catch (FileNotFoundException e) {
             System.out.println(e);
             return new Scanner("ERROR");
-            // "\n\n" +
-            // "#Hi, I'm a Tile file that shouldn't be here\n" +
-            // "#I don't do anything and I don't break anything, so I'm going to stay for now");
         }
     }
 
+    /**
+     * Loops through output directory and deletes all tile config files to clean up directory.
+     */
     public void dirCleaner() {
         List<String> tiles = refTiles;
         List<String> flo_tiles = listBuilder2(refTiles);
         List<String> reg_tiles = files;
         for(int i = 0; i < tiles.size(); i++) {
-            File[] filepaths = {new File(dir + "/" + tiles.get(i)), new File(dir + "/" + flo_tiles.get(i)), new File(dir + "/" + reg_tiles.get(i))};
+            File[] filepaths = {
+            new File(dir + "/" + tiles.get(i)), 
+            new File(dir + "/" + flo_tiles.get(i)), 
+            new File(dir + "/" + reg_tiles.get(i))};
+            
             for(File f: filepaths) {
                 f.delete();
             }

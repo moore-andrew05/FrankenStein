@@ -204,6 +204,9 @@ public class FrankenStitch {
 							ImagePlus imp_merge = Projector.SplitAndMerge(imp_pro, ref);
 							FileSaver p = new FileSaver(imp_merge);
 							p.saveAsTiff(path.replace("FLO", "PRO"));
+							imp_pro.close();
+							ref.close();
+							imp_merge.close();
 							
 						} else {
 							FileSaver s = new FileSaver(imp);
@@ -218,6 +221,8 @@ public class FrankenStitch {
 						ImagePlus imp_merge = Projector.SplitAndMerge(imp, ref);
 						FileSaver s = new FileSaver(imp_merge);
 						s.saveAsTiff(path.replace("FLO", "PRO")); 
+						ref.close();
+						imp_merge.close();
 					}
                 } 
                 catch(Exception e) {

@@ -22,6 +22,18 @@ Navigate to the newest release and download the jar file contained in the assets
 
 Replace {version} with the downloaded version, your command line argument should match the name of the jar.
 
-*Note: The Xmx command specifies the max heap space available to the Java VM, depending on the size of the images being worked with, java will very quickly run out of heap space, requiring that we allocate more memory. The example above allocates 14Gb of memory. Some image sets may require up to ~30Gb. Even if you do not have the required amount of physical memory in your system, you may be able to set the Xmx high enough as it utilizes virtual memory. This will significantly slow the performance of the program, but will allow the program to complete. Regardless, if you get a java heap space error at any point, rerun the program with higher memory allocation.*
+*Note: The Xmx command specifies the max heap space available to the Java VM. Depending on the size of the images being worked with, java will very quickly run out of heap space, requiring that we allocate more memory. The example above allocates 14Gb of memory. Some image sets may require up to ~30Gb. Even if you do not have the required amount of physical memory in your system, you may be able to set the Xmx high enough as it utilizes virtual memory. This will significantly slow the performance of the program, but will allow the program to complete. Regardless, if you get a java heap space error at any point, rerun the program with higher memory allocation.*
 
 Follow the prompts in the program and you should have stitched images!
+
+### *Tips for Naming Images*
+
+DeltaVision images with multiple tiles are incremented using two seperate incrementors following the image name and separated by an underscore (e.g. "image1_1..."; the two incrementors are 1_1). The program will ask for your image names at the start. If your files were named like the previous example, image1_1, you will just plug in "image" for the file names when prompted.
+
+You should be able to name your images anything without throwing an error, but there may be errors if your filenames are especially "challenging"; not all cases have been tested. Importantly, the image names without the incrementor must all be the same in a single directory. If you need different image names, use a separate directory and run the program twice.
+
+### *Known Issues*
+
+-Directories with only one image may not work.
+-If only reference images are present, the program will throw an error. Images will be stitched properly but Tile configs will not be cleaned up.
+

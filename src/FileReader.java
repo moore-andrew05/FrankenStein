@@ -51,7 +51,6 @@ public class FileReader {
         return "";
     }
 
-
     private String[] cleaner(String filename) {
         //Takes the line read from the reader and returns an array with the x and y coordinates
         String line = lineReader(filename);
@@ -86,7 +85,6 @@ public class FileReader {
 
     public void looper(List<List<String>> big_list) {
         for (int i = parsed.getFirstImage() - 1; i < big_list.size(); i++) {
-            System.out.println(big_list.get(i));
             builder(big_list.get(i));
         }
     }

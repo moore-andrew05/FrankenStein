@@ -26,6 +26,7 @@ public class Projector {
         return RGBStackMerge.mergeChannels(full_stack, false);
     }
 
+    
     public static ImagePlus Merge(ImagePlus flo, ImagePlus ref) {
         ImagePlus[] imps = {flo, ref};
         return RGBStackMerge.mergeChannels(imps, false);
