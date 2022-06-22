@@ -160,7 +160,7 @@ public class dirParser {
     /**
      * Takes rawImageList generated in constructor and sorts into a 2D array,
      * with rows sorted by image #. Checker is specific to our delta vision
-     * file names, but can be easily altered.
+     * file incrementors, but can be easily altered.
      * @param files raw file list.
      */
     public void bigCleaner(String[] files) {
@@ -168,7 +168,7 @@ public class dirParser {
         for(int i = 0; i < last; i++) {
             String checker = fileName + (i+1) + "_";
             if(hasLeadingZeroes && i < 9) checker = fileName + "0" + (i+1) + "_";
-            System.out.println(checker);
+           
             List<String> tmp = new ArrayList<String>();
             for(int k = 0; k < files.length; k++) {
                 if (files[k].toLowerCase().startsWith(checker)) {
