@@ -16,8 +16,6 @@ public class Main {
         dirParser dp = new dirParser(dir, out_dir, fileName);
         FileReader fr = new FileReader(dir, dp);
         FileWriter fw = new FileWriter(out_dir, OUT_NAME);
-
-        //dp.bigCleaner(dp.getrawFileList());
         
         fr.looper(dp.getcleanfileList());
         for(int i = 0; i < fr.getPrintList().size(); i++) {
