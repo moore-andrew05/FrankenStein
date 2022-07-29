@@ -1,3 +1,4 @@
+import java.util.Arrays;
 
 public class Main {
     public static void main(String[] args) throws Exception {
@@ -10,37 +11,29 @@ public class Main {
         System.out.println("\nIf you are unclear on what to input for image names, see the README on github.\n");
         String fileName = in.getInput("Enter the name of the images (do not include incrementors)").trim();
         
-        final String OUT_NAME = "Tile";
         long start = System.currentTimeMillis();
         
-        dirParser dp = new dirParser(dir, out_dir, fileName);
-        FileReader fr = new FileReader(dir, dp);
-        FileWriter fw = new FileWriter(out_dir, OUT_NAME);
-
-        //dp.bigCleaner(dp.getrawFileList());
-        
-        fr.looper(dp.getcleanfileList());
-        for(int i = 0; i < fr.getPrintList().size(); i++) {
-            fw.outputBuilder(fr.getPrintList().get(i), dp.getFirstImage() + i);
-        }
-
+        orgHandler oH = new orgHandler(dir, out_dir, fileName);
         FrankenStitch frank = new FrankenStitch();
+
         System.out.println("Config Files Built! \n" +
                             "Stitching reference images...");
 
-        fw.imgNumbers();
-        for(int i = 0; i < fw.getRefTiles().size(); i++) {
-            frank.BigStitch(0, fw.getRefTiles().get(i), dir, "Fused" + (fw.getImgNumbers().get(i)) + "_REF.tif", out_dir, 
+
+        for(int i = 0; i < oH.refTileList.size(); i++) {
+            frank.BigStitch(0, oH.refTileList.get(i), dir, "Fused" + (oH.tiledImgNums.get(i)) + "_REF.tif", out_dir, 
             false, true, false, 0);
         }
 
-        ConfigConverter cc = new ConfigConverter(out_dir, dp.getDims(), fw.getRefTiles());
-        
-        for(int i = 0; i < cc.getPrintList().size(); i++) {
-            fw.outputBuilder2(cc.getPrintList().get(i), fw.getImgNumbers().get(i));
+
+        ConfigConverter cc = new ConfigConverter(out_dir, oH.dims, oH.refTileList, oH.tiledImgNums, fileName);
+
+        for(int i = 0; i < cc.printList.size(); i++) {
+            oH.outputBuilder(cc.printList.get(i), oH.floTileList, cc.finalImgNums.get(i), "_flo");
         }
-        
+
         long t1 = System.currentTimeMillis();
+
         System.out.println("\n\n\n--------------------------------------------------");
         System.out.println("Reference Images Stitched and Tile Configurations Registered Succesfully!");
         System.out.println("Would you like to proceed to Stitching full z-stacks?" +
@@ -49,11 +42,14 @@ public class Main {
                             "\nYou will get a heap space error if you attempt to run without additional memory.");
         String choice = in.getInput("Press enter/return to stitch full stacks, type (e)xit to exit without stitching");
         
+
+
         if (choice.trim().toLowerCase().startsWith("e")) { 
             cc.dirCleaner();
             endScreen();
             System.exit(-1);
         }      
+
         String choice2 = in.getInput("If stitching full z-stacks, type (y)es to MAX project and save");
         int slices = 0;
         boolean projected = false;
@@ -73,14 +69,22 @@ public class Main {
             "\nType (y)es to save, press enter to continue without saving");
             if (stack_saved.trim().toLowerCase().startsWith("y")) saveStack = true;
         }
+
+        
         long t2 = System.currentTimeMillis();
-        for(int i = 0; i < fw.getFloTiles().size(); i++) {
-            String name = "Fused" + fw.getImgNumbers().get(i) + "_FLO.tif";
-            if(!dp.getExistingFused().contains(name)) {
-                frank.BigStitch(1, fw.getFloTiles().get(i), dir, name, out_dir, 
+        
+        
+        for(int i = 0; i < cc.floTiles.size(); i++) {
+
+            String name = "Fused" + cc.finalImgNums.get(i) + "_FLO.tif";
+
+            if(!Arrays.asList(oH.existingFused).contains(name)) {
+                frank.BigStitch(1, cc.floTiles.get(i), dir, name, out_dir, 
                 projected, false, saveStack, slices);
             }
         }
+
+
         cc.dirCleaner();
 
         long stop = System.currentTimeMillis();

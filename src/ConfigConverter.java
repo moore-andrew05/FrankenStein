@@ -1,48 +1,60 @@
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FilenameFilter;
 import java.util.Scanner;
 
 import java.util.List;
 import java.util.ArrayList;
 
 public class ConfigConverter {
-    File dir;
+    File out_dir;
+    final String fileName;
+
     List<String> refTiles = new ArrayList<>();
-    List<String> printList = new ArrayList<>();
+    List<String> floTiles = new ArrayList<>();
+    List<String> regTiles = new ArrayList<>();
+    
+    public List<String> printList = new ArrayList<>();
+    public List<Integer> finalImgNums = new ArrayList<>();
+
     List<Integer> dims = new ArrayList<>();
     List<String> files = new ArrayList<>();
 
-    public ConfigConverter(String dir, List<Integer> dims, List<String> refTiles) {
+    public ConfigConverter(String out_dir, List<Integer> dims, List<String> refTiles, List<Integer> nums, String fileName) {
         this.dims = dims;
-        this.dir = new File(dir);
+        this.out_dir = new File(out_dir);
+        this.finalImgNums = nums;
         this.refTiles = refTiles;
-        listBuilder();
-        looper(files);
+        this.fileName = fileName;
+        
+        regBuilder();
+        printBuilder(regTiles);
+
+        floBuilder();
     }
 
-    private void listBuilder() {
+    FilenameFilter stitched = new FilenameFilter() {
+        public boolean accept(File f, String name) 
+        {
+            return name.contains(".registered.txt");
+        }
+    };
+
+    
+    private void regBuilder() {
         for(String s: this.refTiles) {
             if(s==null) continue;
             String tmp = s.replace(".txt", ".registered.txt");
-            this.files.add(tmp);
+            this.regTiles.add(tmp);
         }
     }
 
-    private List<String> listBuilder2(List<String> in) {
-        List<String> out = new ArrayList<>();
-        for(String s: in) {
-            out.add(s.replace(".txt", "_flo.txt"));
+    private void floBuilder() {
+        for(String s : this.regTiles) {
+            String tmp = s.replace(".registered", "_flo");
+            this.floTiles.add(tmp);
         }
-        return out;
-    }
-
-    public List<String> getPrintList() {
-        return printList;
-    }
-
-    public List<String> getFiles() {
-        return files;
     }
 
     private String builder(String filename, int dim) {
@@ -52,7 +64,7 @@ public class ConfigConverter {
             String line = file.nextLine();
             if(line.startsWith("dim") && dim == 3) {
                 rtn += "dim = 3\n";
-            } else if(line.startsWith("image")) {
+            } else if(line.startsWith(this.fileName)) {
                 if (dim == 3) {
                     String edited = line.substring(0, line.length() - 1) + ", 0.0)\n";
                     rtn += edited.replaceAll("_REF", "");
@@ -69,15 +81,24 @@ public class ConfigConverter {
         return rtn;
     }
 
-    private void looper(List<String> files) {
+    private void printBuilder(List<String> files) {
         for (int i = 0; i < files.size(); i++) {
             printList.add(builder(files.get(i), dims.get(i)));
+        }
+
+        for (int i = 0; i < printList.size(); i++) {
+            if(printList.get(i) == "ERROR") {
+                printList.remove(i);
+                dims.remove(i);
+                regTiles.remove(i);
+                finalImgNums.remove(i);
+            }
         }
     }
 
     private Scanner fileOpen(String filename) {
         try {
-            return new Scanner(new File(dir + "/" + filename));
+            return new Scanner(new File(out_dir + "/" + filename));
         }catch (FileNotFoundException e) {
             System.out.println(e);
             return new Scanner("ERROR");
@@ -88,18 +109,14 @@ public class ConfigConverter {
      * Loops through output directory and deletes all tile config files to clean up directory.
      */
     public void dirCleaner() {
-        List<String> tiles = refTiles;
-        List<String> flo_tiles = listBuilder2(refTiles);
-        List<String> reg_tiles = files;
-        for(int i = 0; i < tiles.size(); i++) {
-            File[] filepaths = {
-            new File(dir + "/" + tiles.get(i)), 
-            new File(dir + "/" + flo_tiles.get(i)), 
-            new File(dir + "/" + reg_tiles.get(i))};
-            
-            for(File f: filepaths) {
-                f.delete();
-            }
+        for(String s: refTiles) {
+            new File(out_dir + "/" + s).delete();
+        }
+        for(String s: regTiles) {
+            new File(out_dir + "/" + s).delete();
+        }
+        for(String s: floTiles) {
+            new File(out_dir + "/" + s).delete();
         }
     }
 }
