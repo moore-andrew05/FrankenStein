@@ -47,7 +47,7 @@ public class orgHandler {
     FilenameFilter refLogFilter = new FilenameFilter() {
         public boolean accept(File f, String name)
             {
-                return name.contains("REF.dv.log") && (!name.contains("D3D")) && (!name.contains("sh.joblog"));
+                return name.contains("REF.dv.log") && name.contains(fileName) && (!name.contains("D3D")) && (!name.contains("sh.joblog"));
             }
     };
 

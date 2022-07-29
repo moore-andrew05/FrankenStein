@@ -34,6 +34,7 @@ public class Main {
 
         long t1 = System.currentTimeMillis();
 
+        System.out.println(oH.cleanFileList);
         System.out.println("\n\n\n--------------------------------------------------");
         System.out.println("Reference Images Stitched and Tile Configurations Registered Succesfully!");
         System.out.println("Would you like to proceed to Stitching full z-stacks?" +
