@@ -47,7 +47,7 @@ public class orgHandler {
     FilenameFilter refLogFilter = new FilenameFilter() {
         public boolean accept(File f, String name)
             {
-                return name.contains("REF.dv.log");
+                return name.contains("REF.dv.log") && (!name.contains("D3D")) && (!name.contains("sh.joblog"));
             }
     };
 
@@ -76,7 +76,7 @@ public class orgHandler {
 
         List<String> tmp = new ArrayList<>();
         for(List<String> tiles: cleanFileList) {
-            tmp.add(tiles.get(0));
+            tmp.add(tiles.get(1));
         }
 
         tiledImgNums = getImgNums(tmp);
@@ -273,33 +273,4 @@ public class orgHandler {
             System.exit(-1);
         }
     }
-
-    
-
-
-
-
-
-
-
-    public static void main(String[] args) {
-        orgHandler oH = new orgHandler("Y:/robert/220711_ELT-2_Regulation_Rep2/ELT2gfp/ELT2rnai", 
-        "E:/local_files/Stitching/Outputs/220728_tests", 
-        "220711_ELT2gfp_ELT2rnai_worm");
-
-        System.out.println(oH.cleanFileList);
-        System.out.println(oH.singleTiles);
-
-        System.out.println(oH.tiledImgNums);
-        System.out.println(oH.singleImgNums);
-
-        System.out.println(oH.printList);
-    }
-
-    
-
-
-
-
-
 }
