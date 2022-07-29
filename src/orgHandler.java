@@ -18,7 +18,9 @@ public class orgHandler {
 
     List<List<String>> cleanFileList = new ArrayList<List<String>>();
     public List<String> singleTiles = new ArrayList<String>();
+    public List<String> singleRefs = new ArrayList<String>();
     public List<String> singleFloTiles = new ArrayList<String>();
+    public List<String> singleFlos = new ArrayList<String>();
 
     List<Integer> dims = new ArrayList<Integer>();
     List<Integer> tiledImgNums = new ArrayList<Integer>();
@@ -29,8 +31,6 @@ public class orgHandler {
 
     int lastImg;
     boolean hasLeadingZeroes = false;
-
-
 
     private final String STAGE_INDICATOR = "Stage coordinates";
     private final String PIXEL_INDICATOR = "Pixel Size:";
@@ -72,6 +72,7 @@ public class orgHandler {
         this.lastImg = findLastImage();
         leadingZeroes();
         bigCleaner(rawFileList);
+        getSingleImgs();
 
 
         List<String> tmp = new ArrayList<>();
@@ -93,7 +94,17 @@ public class orgHandler {
         }
     }
 
-
+    private void getSingleImgs() {
+        for (String s: singleTiles) {
+            singleFloTiles.add(s.replace("_REF", ""));
+        }
+        for (String s: singleTiles) {
+            singleRefs.add(s.replace(".log", ""));
+        }
+        for (String s: singleFloTiles) {
+            singleFlos.add(s.replace(".log", ""));
+        }
+    }
 
 
     private List<Integer> getImgNums(List<String> tiles) {

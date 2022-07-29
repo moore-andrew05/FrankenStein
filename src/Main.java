@@ -2,6 +2,79 @@ import java.util.Arrays;
 
 public class Main {
     public static void main(String[] args) throws Exception {
+
+        if(args[0].trim().toLowerCase().startsWith("command")) {
+            commandLineTool();
+            System.exit(-1);
+        }
+    
+        String dir;
+        String out_dir;
+        String filename;
+        
+        boolean saveStack = false;
+        boolean projected = true;
+        int slices = 0;
+
+
+        dir = args[0];
+        out_dir = args[1];
+        filename = args[2];
+        if(args[3].trim().toLowerCase().startsWith("t")) {
+            saveStack = true;
+        }
+
+        if(args.length > 4) {
+            try{
+                slices = Integer.parseInt(args[4]);
+            } catch(NumberFormatException n) {
+                n.printStackTrace();
+            }
+        }
+
+        orgHandler oH = new orgHandler(dir, out_dir, filename);
+        FrankenStitch frank = new FrankenStitch();
+
+        for(int i = 0; i < oH.refTileList.size(); i++) {
+            frank.BigStitch(0, oH.refTileList.get(i), dir, filename + (oH.tiledImgNums.get(i)) + "_REF.tif", out_dir, 
+            false, true, false, 0);
+        }
+
+        ConfigConverter cc = new ConfigConverter(out_dir, oH.dims, oH.refTileList, oH.tiledImgNums, filename);
+
+        for(int i = 0; i < cc.printList.size(); i++) {
+            oH.outputBuilder(cc.printList.get(i), oH.floTileList, cc.finalImgNums.get(i), "_flo");
+        }
+
+        for(int i = 0; i < cc.floTiles.size(); i++) {
+
+            String name = filename + cc.finalImgNums.get(i) + "_FLO.tif";
+
+            if(!Arrays.asList(oH.existingFused).contains(name)) {
+                frank.BigStitch(1, cc.floTiles.get(i), dir, name, out_dir, 
+                projected, false, saveStack, slices);
+            }
+        }
+
+        for (int i = 0; i < oH.singleRefs.size(); i++) {
+
+            String name = filename + oH.singleImgNums.get(i) + "_FLO.tif";
+
+            System.out.println(oH.singleRefs);
+            System.out.println(oH.singleFlos);
+
+            String refPath = dir + "/" + oH.singleRefs.get(i);
+            String floPath = dir + "/" + oH.singleFlos.get(i);
+
+            String out_path = out_dir + "/" + name;
+
+            Projector.singleTileProject(refPath , floPath, out_path, slices, saveStack);
+        }
+
+        cc.dirCleaner();
+    }
+
+    private static void commandLineTool() {
         startScreen();
         
         UserIn in = new UserIn();        
@@ -21,7 +94,7 @@ public class Main {
 
 
         for(int i = 0; i < oH.refTileList.size(); i++) {
-            frank.BigStitch(0, oH.refTileList.get(i), dir, "Fused" + (oH.tiledImgNums.get(i)) + "_REF.tif", out_dir, 
+            frank.BigStitch(0, oH.refTileList.get(i), dir, fileName + (oH.tiledImgNums.get(i)) + "_REF.tif", out_dir, 
             false, true, false, 0);
         }
 
@@ -34,7 +107,6 @@ public class Main {
 
         long t1 = System.currentTimeMillis();
 
-        System.out.println(oH.cleanFileList);
         System.out.println("\n\n\n--------------------------------------------------");
         System.out.println("Reference Images Stitched and Tile Configurations Registered Succesfully!");
         System.out.println("Would you like to proceed to Stitching full z-stacks?" +
@@ -77,12 +149,27 @@ public class Main {
         
         for(int i = 0; i < cc.floTiles.size(); i++) {
 
-            String name = "Fused" + cc.finalImgNums.get(i) + "_FLO.tif";
+            String name = fileName + cc.finalImgNums.get(i) + "_FLO.tif";
 
             if(!Arrays.asList(oH.existingFused).contains(name)) {
                 frank.BigStitch(1, cc.floTiles.get(i), dir, name, out_dir, 
                 projected, false, saveStack, slices);
             }
+        }
+
+        for (int i = 0; i < oH.singleRefs.size(); i++) {
+
+            String name = fileName + oH.singleImgNums.get(i) + "_FLO.tif";
+
+            System.out.println(oH.singleRefs);
+            System.out.println(oH.singleFlos);
+
+            String refPath = dir + "/" + oH.singleRefs.get(i);
+            String floPath = dir + "/" + oH.singleFlos.get(i);
+
+            String out_path = out_dir + "/" + name;
+
+            Projector.singleTileProject(refPath , floPath, out_path, slices, saveStack);
         }
 
 
@@ -94,6 +181,9 @@ public class Main {
 
         endScreen();
     }
+
+
+
 
     private static void endScreen() {
         System.out.println("       +==========================================================+\n" +
@@ -118,6 +208,8 @@ public class Main {
         "                         |_____/ \\__\\___|_|_| |_| \n" +
         "       +==========================================================+\n\n");
     }
+
+
 
     private static void timeTaken(long start, long stop, long sub) {
         long dif = stop - start - sub;
