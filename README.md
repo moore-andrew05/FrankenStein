@@ -16,15 +16,30 @@ This program will create a stitched reference image and a stitched composite ima
 
 ### *Installation and Running*
 
+#### *Running on the Command Line*
+
 Navigate to the newest release and download the jar file contained in the assets. Place the jar wherever you want to run it from on your computer. Then using terminal (macOS) or powershell (Windows), cd into the directory that contains the jar. Run the following line:
 
-> \> java -Xmx14G -jar FrankenStein_{version}.jar
+> \> java -Xmx14G -jar FrankenStein_{version}.jar commandline
 
-Replace {version} with the downloaded version, your command line argument should match the name of the jar.
+Replace {version} with the downloaded version, your command line argument should match the name of the jar. the "commandline" following the jar is a flag to specify that you want to run on the command line.
 
 *Note: The Xmx command specifies the max heap space available to the Java VM. Depending on the size of the images being worked with, java will very quickly run out of heap space, requiring that we allocate more memory. The example above allocates 14Gb of memory. Some image sets may require up to ~30Gb. Even if you do not have the required amount of physical memory in your system, you may be able to set the Xmx high enough as it utilizes virtual memory. This will significantly slow the performance of the program, but will allow the program to complete. Regardless, if you get a java heap space error at any point, rerun the program with higher memory allocation.*
 
 Follow the prompts in the program and you should have stitched images!
+
+#### *Running Headless*
+
+Users that wish to use scripting or who are more comfortable may wish to use flags to run the program without any further input. To do so...
+
+> \> java -Xmx{virtual_mem(int)}G -jar FrankenStein_{version}.jar {input_directory} {output_directory} {filename} {saveStacks (T/F)} {slices (optional)}
+
+Flags:
+    input_directory: directory that contains the images to be processed (absolute path)
+    output_directory: directory processed images will be written to (absolute path)
+    filename: entire filename up to the first incrementor (See below for help)
+    saveStacks: whether to save full stacks of each image, not recommended if not needed as will take up a lot of space. Simply enter true or false
+    slices: specifies how many z-stacks to remove from top and bottom of images. Mostly for late stage worms where top and bottom of image can vary greatly between tiles. Optional parameter, default is 0.
 
 ### *Tips for Naming Images*
 
