@@ -35,6 +35,7 @@ Users that wish to use scripting or who are more comfortable may wish to use fla
 > \> java -Xmx{virtual_mem(int)}G -jar FrankenStein_{version}.jar {input_directory} {output_directory} {filename} {saveStacks (T/F)} {slices (optional)}
 
 Flags:
+    
     input_directory: directory that contains the images to be processed (absolute path)
     
     output_directory: directory processed images will be written to (absolute path)
