@@ -36,9 +36,13 @@ Users that wish to use scripting or who are more comfortable may wish to use fla
 
 Flags:
     input_directory: directory that contains the images to be processed (absolute path)
+    
     output_directory: directory processed images will be written to (absolute path)
+    
     filename: entire filename up to the first incrementor (See below for help)
+    
     saveStacks: whether to save full stacks of each image, not recommended if not needed as will take up a lot of space. Simply enter true or false
+    
     slices: specifies how many z-stacks to remove from top and bottom of images. Mostly for late stage worms where top and bottom of image can vary greatly between tiles. Optional parameter, default is 0.
 
 ### *Tips for Naming Images*
