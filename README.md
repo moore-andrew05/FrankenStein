@@ -44,7 +44,7 @@ Flags:
     saveStacks: whether to save full stacks of each image, not recommended if not 
     needed as will take up a lot of space. Simply enter true or false
     
-    slices: specifies how many z-stacks to remove from top and bottom of images. 
+    slices: specifies how many z-stacks to remove from top and bottom of images when projecting. 
     Mostly for late stage worms where top and bottom of image can vary greatly between tiles. 
     Optional parameter, default is 0.
 
