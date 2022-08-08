@@ -59,3 +59,4 @@ You should be able to name your images anything without throwing an error, but t
 
 -If only reference images are present, the program will throw an error. Images will be stitched properly but Tile configs will not be cleaned up.
 
+-Single Tile 2D images may cause issues when they are z-projected
