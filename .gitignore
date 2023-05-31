@@ -1,4 +1,7 @@
 needed_out.log  
+test_logs
 FrankenStein_*
 FrankenStein.jar
 jars/*
+test_data
+

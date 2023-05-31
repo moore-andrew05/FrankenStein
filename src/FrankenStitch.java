@@ -54,6 +54,7 @@ public class FrankenStitch {
 		ArrayList<ImageCollectionElement> elements = getLayoutFromFile(directory, outDirectory, outputFile, d);
 		if (style==0) { params = refParams();} 
 		if (style==1) { params = floParams();}
+		if (style==2) { params = conParams();}
 
 		for ( final ImageCollectionElement element : elements )
 		{
@@ -249,6 +250,16 @@ public class FrankenStitch {
 	}
 	
 	private StitchingParameters floParams() {
+		StitchingParameters s = new StitchingParameters();
+		s.fusionMethod = 0; s.regThreshold = 0.10; s.relativeThreshold = 2.50; s.absoluteThreshold = 3.50;
+        s.computeOverlap = false; s.invertX = false; s.invertY = false; s.ignoreZStage = true; s.subpixelAccuracy = false;
+        s.displayFusion = false; s.virtual = true; s.cpuMemChoice = 0; s.outputVariant = 0; s.outputDirectory = null;
+        s.channel1 = 0; s.channel2 = 0;
+        s.timeSelect = 0; s.checkPeaks = 5;
+		return s;
+	}
+
+	private StitchingParameters conParams() {
 		StitchingParameters s = new StitchingParameters();
 		s.fusionMethod = 0; s.regThreshold = 0.10; s.relativeThreshold = 2.50; s.absoluteThreshold = 3.50;
         s.computeOverlap = false; s.invertX = false; s.invertY = false; s.ignoreZStage = true; s.subpixelAccuracy = false;
