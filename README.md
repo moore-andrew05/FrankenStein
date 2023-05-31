@@ -60,3 +60,7 @@ You should be able to name your images anything without throwing an error, but t
 -If only reference images are present, the program will throw an error. Images will be stitched properly but Tile configs will not be cleaned up.
 
 -Single Tile 2D images may cause issues when they are z-projected
+
+### *IN DEVELOPMENT*
+
+Currently working on an addition to stitch slidebook exports captured on the confocal we use. It's somewhat working at the moment, but still buggy. To run the confocal setting run with the flags  "command (con)focal".

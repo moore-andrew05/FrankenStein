@@ -263,7 +263,7 @@ public class FrankenStitch {
 		StitchingParameters s = new StitchingParameters();
 		s.fusionMethod = 0; s.regThreshold = 0.10; s.relativeThreshold = 2.50; s.absoluteThreshold = 3.50;
         s.computeOverlap = false; s.invertX = false; s.invertY = false; s.ignoreZStage = true; s.subpixelAccuracy = false;
-        s.displayFusion = false; s.virtual = true; s.cpuMemChoice = 0; s.outputVariant = 0; s.outputDirectory = null;
+        s.displayFusion = false; s.virtual = false; s.cpuMemChoice = 0; s.outputVariant = 0; s.outputDirectory = null;
         s.channel1 = 0; s.channel2 = 0;
         s.timeSelect = 0; s.checkPeaks = 5;
 		return s;

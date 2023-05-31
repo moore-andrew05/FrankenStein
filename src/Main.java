@@ -1,11 +1,18 @@
+import java.io.File;
 import java.util.Arrays;
 
 public class Main {
     public static void main(String[] args) throws Exception {
 
         if(args[0].trim().toLowerCase().startsWith("command")) {
-            commandLineTool();
-            System.exit(-1);
+            if(args[1].trim().toLowerCase().startsWith("dv")) {
+                commandLineToolDV();
+                System.exit(-1);
+            }
+            if(args[1].trim().toLowerCase().startsWith("co")) {
+                commandLineToolCON();
+                System.exit(-1);
+            }
         }
 
     
@@ -75,7 +82,7 @@ public class Main {
         cc.dirCleaner();
     }
 
-    private static void commandLineTool() {
+    private static void commandLineToolDV() {
         startScreen();
         
         UserIn in = new UserIn();        
@@ -179,6 +186,61 @@ public class Main {
         long stop = System.currentTimeMillis();
         long sub = t2 - t1;
         timeTaken(start, stop, sub);
+
+        endScreen();
+    }
+
+    private static void commandLineToolCON() {
+        startScreen();
+        
+        UserIn in = new UserIn();        
+
+        String dir = in.getInput("Enter Image Directory");
+        String out_dir = in.getInput("Enter output directory (Stitched images will be saved here)");
+        System.out.println("\nIf you are unclear on what to input for image names, see the README on github.\n");
+        String fileName = in.getInput("Enter the name of the images (do not include incrementors)").trim();
+        
+        long start = System.currentTimeMillis();
+        
+        Slidebook_Converter sld = new Slidebook_Converter(dir, out_dir, fileName);
+        FrankenStitch frank = new FrankenStitch();
+
+        System.out.println("Config Files Built! \n" +
+        "Performing Stitching!");
+
+        String choice2 = in.getInput("If stitching full z-stacks, type (y)es to MAX project and save");
+        int slices = 0;
+        boolean projected = false;
+        boolean saveStack = false;
+
+        if (choice2.trim().toLowerCase().startsWith("y")) {
+            projected = true;
+            String s_slices = in.getInput("How many z-stacks would you like to take off top and bottom of image?"  + 
+            "\n(Press enter to keep default of 0)");
+            try {
+                slices = Integer.parseInt(s_slices.trim());
+            } catch (NumberFormatException n) {
+                System.out.println("\nDefaults Kept\n");
+            }
+            String stack_saved = in.getInput("Would you like to also save the full stitched image with z-stacks?" +
+            "\n[Not recommended if not needed as file sizes are >5GB in many cases]" +
+            "\nType (y)es to save, press enter to continue without saving");
+            if (stack_saved.trim().toLowerCase().startsWith("y")) saveStack = true;
+        }
+
+
+        for (int i = 0; i < sld.tiles.size(); i++) {
+            frank.BigStitch(2, sld.tiles.get(i), dir, sld.filename + (i+1) + "_FUSED.tif", out_dir, projected, false, true, 0);
+        }
+
+
+        for(String s: sld.tiles) {
+            new File(out_dir + "/" + s).delete();
+        }
+
+        //long stop = System.currentTimeMillis();
+        //long sub = t2 - t1;
+        //timeTaken(start, stop, sub);
 
         endScreen();
     }

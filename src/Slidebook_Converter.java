@@ -2,13 +2,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
-
-import mdbtools.libmdb.file;
 
 import java.io.PrintWriter;
 
@@ -126,6 +123,7 @@ public class Slidebook_Converter {
             PrintWriter writer = new PrintWriter(new File(out_dir + "/" + this.filename + img_num +  ".txt"));
             writer.println(lines);
             writer.close();
+            tiles.add(this.filename + img_num + ".txt");
         } catch(FileNotFoundException e) {
             System.out.println(e);
             System.exit(-1);
@@ -136,7 +134,7 @@ public class Slidebook_Converter {
 
 
     public static void main(String[] args) {
-        Slidebook_Converter sld = new Slidebook_Converter("/Volumes/onishlab_shared/PROJECTS/30_Andrew/CONFOCAL_RAW/230525/Jub66(RFP)_ONTO_OP50", "./test_data", "image");
+        Slidebook_Converter sld = new Slidebook_Converter("/Volumes/onishlab_shared/PROJECTS/30_Andrew/CONFOCAL_RAW/230525/Jub66(RFP)_ONTO_OP50", "./log_out", "image");
         // for(double[] coords: sld.coordList) {
         //     System.out.println(coords[0]);
 
@@ -146,10 +144,10 @@ public class Slidebook_Converter {
         //     System.out.println(f[0]);
         //     System.out.println(f[1]);
         // }
-        System.out.println(sld.builder());
-        System.out.println(sld.imgNums);
-        //FrankenStitch frank = new FrankenStitch();
-        //frank.BigStitch(1, "image1.txt", "./test_data", "stitched.tif", "./test_data", true, false, true, 0);
+        
+        System.out.println(sld.tiles);
+        FrankenStitch frank = new FrankenStitch();
+        frank.BigStitch(1, "image1.txt", "./test_data", "stitched.tif", "./test_data", true, false, true, 0);
 
     }
 }
