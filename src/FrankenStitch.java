@@ -45,7 +45,7 @@ public class FrankenStitch {
 	 */ 
 
     public void BigStitch(int style, String outputFile, String directory, String fileOutName, String outDirectory, 
-	boolean projected, boolean isReference, boolean saveFullStack, int slices) {
+	boolean projected, boolean isReference, boolean saveFullStack, int slices, boolean confocal) {
 		Downsampler d = null;
 		int numChannels = -1; int numTimePoints = -1;
         boolean is2d = false; boolean is3d = false;
@@ -54,6 +54,7 @@ public class FrankenStitch {
 		ArrayList<ImageCollectionElement> elements = getLayoutFromFile(directory, outDirectory, outputFile, d);
 		if (style==0) { params = refParams();} 
 		if (style==1) { params = floParams();}
+		if (style==2) { params = conParams();}
 
 		for ( final ImageCollectionElement element : elements )
 		{
@@ -201,13 +202,17 @@ public class FrankenStitch {
 							ImagePlus imp_pro = Projector.Zproject(imp, slices);
 							String refRef = path.replace("FLO", "REF");
 							ImagePlus ref = new ImagePlus(refRef);
-							ImagePlus imp_merge = Projector.SplitAndMerge(imp_pro, ref);
-							FileSaver p = new FileSaver(imp_merge);
-							p.saveAsTiff(path.replace("FLO", "PRO"));
-							imp_pro.close();
+							if (!confocal) {
+								ImagePlus imp_merge = Projector.SplitAndMerge(imp_pro, ref);
+								FileSaver p = new FileSaver(imp_merge);
+								p.saveAsTiff(path + "_MAX.tif");
+								imp_merge.close();
+							} else {
+								FileSaver p = new FileSaver(imp_pro);
+								p.saveAsTiff(path + "_MAX.tif");
+							}
 							ref.close();
-							imp_merge.close();
-							
+							imp_pro.close();
 						} else {
 							FileSaver s = new FileSaver(imp);
 							s.saveAsTiffStack(path);
@@ -253,6 +258,16 @@ public class FrankenStitch {
 		s.fusionMethod = 0; s.regThreshold = 0.10; s.relativeThreshold = 2.50; s.absoluteThreshold = 3.50;
         s.computeOverlap = false; s.invertX = false; s.invertY = false; s.ignoreZStage = true; s.subpixelAccuracy = false;
         s.displayFusion = false; s.virtual = true; s.cpuMemChoice = 0; s.outputVariant = 0; s.outputDirectory = null;
+        s.channel1 = 0; s.channel2 = 0;
+        s.timeSelect = 0; s.checkPeaks = 5;
+		return s;
+	}
+
+	private StitchingParameters conParams() {
+		StitchingParameters s = new StitchingParameters();
+		s.fusionMethod = 0; s.regThreshold = 0.10; s.relativeThreshold = 2.50; s.absoluteThreshold = 3.50;
+        s.computeOverlap = false; s.invertX = false; s.invertY = false; s.ignoreZStage = true; s.subpixelAccuracy = false;
+        s.displayFusion = false; s.virtual = false; s.cpuMemChoice = 0; s.outputVariant = 0; s.outputDirectory = null;
         s.channel1 = 0; s.channel2 = 0;
         s.timeSelect = 0; s.checkPeaks = 5;
 		return s;

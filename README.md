@@ -28,6 +28,14 @@ Replace {version} with the downloaded version, your command line argument should
 
 Follow the prompts in the program and you should have stitched images!
 
+#### *ADDED: Confocal Stitching from SlideBook Outputs*
+
+To run using images exported using slidebook, use the following:
+
+> \> java -Xmx14G -jar FrankenStein_{version}.jar commandline (con)focal
+
+This is just added; there are no options for running headless yet, and there may be bugs. 
+
 #### *Running Headless*
 
 Users that wish to use scripting or who are more comfortable may wish to use flags to run the program without any further input. To do so...
@@ -60,3 +68,7 @@ You should be able to name your images anything without throwing an error, but t
 -If only reference images are present, the program will throw an error. Images will be stitched properly but Tile configs will not be cleaned up.
 
 -Single Tile 2D images may cause issues when they are z-projected
+
+### *IN DEVELOPMENT*
+
+Currently working on an addition to stitch slidebook exports captured on the confocal we use. It's somewhat working at the moment, but still buggy. To run the confocal setting run with the flags  "command (con)focal".
