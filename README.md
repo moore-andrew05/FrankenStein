@@ -28,6 +28,14 @@ Replace {version} with the downloaded version, your command line argument should
 
 Follow the prompts in the program and you should have stitched images!
 
+#### *ADDED: Confocal Stitching from SlideBook Outputs*
+
+To run using images exported using slidebook, use the following:
+
+> \> java -Xmx14G -jar FrankenStein_{version}.jar commandline (con)focal
+
+This is just added; there are no options for running headless yet, and there may be bugs. 
+
 #### *Running Headless*
 
 Users that wish to use scripting or who are more comfortable may wish to use flags to run the program without any further input. To do so...

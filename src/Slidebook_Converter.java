@@ -129,25 +129,4 @@ public class Slidebook_Converter {
             System.exit(-1);
         }
     }
-
-
-
-
-    public static void main(String[] args) {
-        Slidebook_Converter sld = new Slidebook_Converter("/Volumes/onishlab_shared/PROJECTS/30_Andrew/CONFOCAL_RAW/230525/Jub66(RFP)_ONTO_OP50", "./log_out", "image");
-        // for(double[] coords: sld.coordList) {
-        //     System.out.println(coords[0]);
-
-        // }
-
-        // for(String[] f: sld.preFuse) {
-        //     System.out.println(f[0]);
-        //     System.out.println(f[1]);
-        // }
-        
-        System.out.println(sld.tiles);
-        FrankenStitch frank = new FrankenStitch();
-        frank.BigStitch(1, "image1.txt", "./test_data", "stitched.tif", "./test_data", true, false, true, 0);
-
-    }
 }

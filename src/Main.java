@@ -14,7 +14,6 @@ public class Main {
                 System.exit(-1);
             }
         }
-
     
         String dir;
         String out_dir;
@@ -45,7 +44,7 @@ public class Main {
 
         for(int i = 0; i < oH.refTileList.size(); i++) {
             frank.BigStitch(0, oH.refTileList.get(i), dir, filename + (oH.tiledImgNums.get(i)) + "_REF.tif", out_dir, 
-            false, true, false, 0);
+            false, true, false, 0, false);
         }
 
         ConfigConverter cc = new ConfigConverter(out_dir, oH.dims, oH.refTileList, oH.tiledImgNums, filename);
@@ -60,7 +59,7 @@ public class Main {
 
             if(!Arrays.asList(oH.existingFused).contains(name)) {
                 frank.BigStitch(1, cc.floTiles.get(i), dir, name, out_dir, 
-                projected, false, saveStack, slices);
+                projected, false, saveStack, slices, false);
             }
         }
 
@@ -103,7 +102,7 @@ public class Main {
 
         for(int i = 0; i < oH.refTileList.size(); i++) {
             frank.BigStitch(0, oH.refTileList.get(i), dir, fileName + (oH.tiledImgNums.get(i)) + "_REF.tif", out_dir, 
-            false, true, false, 0);
+            false, true, false, 0, false);
         }
 
 
@@ -161,7 +160,7 @@ public class Main {
 
             if(!Arrays.asList(oH.existingFused).contains(name)) {
                 frank.BigStitch(1, cc.floTiles.get(i), dir, name, out_dir, 
-                projected, false, saveStack, slices);
+                projected, false, saveStack, slices, false);
             }
         }
 
@@ -201,9 +200,11 @@ public class Main {
         String fileName = in.getInput("Enter the name of the images (do not include incrementors)").trim();
         
         long start = System.currentTimeMillis();
-        
+
         Slidebook_Converter sld = new Slidebook_Converter(dir, out_dir, fileName);
         FrankenStitch frank = new FrankenStitch();
+        
+        long t1 = System.currentTimeMillis();
 
         System.out.println("Config Files Built! \n" +
         "Performing Stitching!");
@@ -211,7 +212,7 @@ public class Main {
         String choice2 = in.getInput("If stitching full z-stacks, type (y)es to MAX project and save");
         int slices = 0;
         boolean projected = false;
-        boolean saveStack = false;
+        
 
         if (choice2.trim().toLowerCase().startsWith("y")) {
             projected = true;
@@ -222,15 +223,14 @@ public class Main {
             } catch (NumberFormatException n) {
                 System.out.println("\nDefaults Kept\n");
             }
-            String stack_saved = in.getInput("Would you like to also save the full stitched image with z-stacks?" +
-            "\n[Not recommended if not needed as file sizes are >5GB in many cases]" +
-            "\nType (y)es to save, press enter to continue without saving");
-            if (stack_saved.trim().toLowerCase().startsWith("y")) saveStack = true;
         }
+
+        long t2 = System.currentTimeMillis();
 
 
         for (int i = 0; i < sld.tiles.size(); i++) {
-            frank.BigStitch(2, sld.tiles.get(i), dir, sld.filename + (i+1) + "_FUSED.tif", out_dir, projected, false, true, 0);
+            frank.BigStitch(2, sld.tiles.get(i), dir, sld.filename + (i+1) + "_FUSED.tif", 
+            out_dir, projected, false, true, slices, true);
         }
 
 
@@ -238,9 +238,9 @@ public class Main {
             new File(out_dir + "/" + s).delete();
         }
 
-        //long stop = System.currentTimeMillis();
-        //long sub = t2 - t1;
-        //timeTaken(start, stop, sub);
+        long stop = System.currentTimeMillis();
+        long sub = t2 - t1;
+        timeTaken(start, stop, sub);
 
         endScreen();
     }

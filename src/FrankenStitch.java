@@ -45,7 +45,7 @@ public class FrankenStitch {
 	 */ 
 
     public void BigStitch(int style, String outputFile, String directory, String fileOutName, String outDirectory, 
-	boolean projected, boolean isReference, boolean saveFullStack, int slices) {
+	boolean projected, boolean isReference, boolean saveFullStack, int slices, boolean confocal) {
 		Downsampler d = null;
 		int numChannels = -1; int numTimePoints = -1;
         boolean is2d = false; boolean is3d = false;
@@ -202,13 +202,17 @@ public class FrankenStitch {
 							ImagePlus imp_pro = Projector.Zproject(imp, slices);
 							String refRef = path.replace("FLO", "REF");
 							ImagePlus ref = new ImagePlus(refRef);
-							ImagePlus imp_merge = Projector.SplitAndMerge(imp_pro, ref);
-							FileSaver p = new FileSaver(imp_merge);
-							p.saveAsTiff(path.replace("FLO", "PRO"));
-							imp_pro.close();
+							if (!confocal) {
+								ImagePlus imp_merge = Projector.SplitAndMerge(imp_pro, ref);
+								FileSaver p = new FileSaver(imp_merge);
+								p.saveAsTiff(path + "_MAX.tif");
+								imp_merge.close();
+							} else {
+								FileSaver p = new FileSaver(imp_pro);
+								p.saveAsTiff(path + "_MAX.tif");
+							}
 							ref.close();
-							imp_merge.close();
-							
+							imp_pro.close();
 						} else {
 							FileSaver s = new FileSaver(imp);
 							s.saveAsTiffStack(path);
