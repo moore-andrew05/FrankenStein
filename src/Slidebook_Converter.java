@@ -50,7 +50,7 @@ public class Slidebook_Converter {
         this.imgNums = getImgNums();
         
         for (int num: imgNums) {
-            this.currfile = filename + num;
+            this.currfile = filename + num + " ";
             String[] img = this.dir.list(imgFilter);
 
             this.currCoords.clear();

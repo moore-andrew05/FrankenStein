@@ -20,21 +20,13 @@ This program will create a stitched reference image and a stitched composite ima
 
 Navigate to the newest release and download the jar file contained in the assets. Place the jar wherever you want to run it from on your computer. Then using terminal (macOS) or powershell (Windows), cd into the directory that contains the jar. Run the following line:
 
-> \> java -Xmx14G -jar FrankenStein_{version}.jar commandline
+> \> java -Xmx14G -jar FrankenStein_{version}.jar commandline {dv/confocal}
 
-Replace {version} with the downloaded version, your command line argument should match the name of the jar. the "commandline" following the jar is a flag to specify that you want to run on the command line.
+Replace {version} with the downloaded version, your command line argument should match the name of the jar. the "commandline" following the jar is a flag to specify that you want to run on the command line. The final flag is used to specify whether the images were captured on the deltavision or confocal systems that we use. For deltavision images, this flag should be set to "dv". For confocal images, this flag should be set to "confocal."
 
-*Note: The Xmx command specifies the max heap space available to the Java VM. Depending on the size of the images being worked with, java will very quickly run out of heap space, requiring that we allocate more memory. The example above allocates 14Gb of memory. Some image sets may require up to ~30Gb. Even if you do not have the required amount of physical memory in your system, you may be able to set the Xmx high enough as it utilizes virtual memory. This will significantly slow the performance of the program, but will allow the program to complete. Regardless, if you get a java heap space error at any point, rerun the program with higher memory allocation.*
+*Note: The Xmx command specifies the max heap space available to the Java VM. Depending on the size of the images being worked with, java will very quickly run out of heap space, requiring that we allocate more memory. The example above allocates 14Gb of memory. Some image sets may require up to ~30Gb. Even if you do not have the required amount of physical memory in your system, you may be able to set the Xmx high enough as it will utilize virtual memory. This will significantly slow the performance of the program but will allow it to complete. Regardless, if you get a java heap space error at any point, rerun the program with higher memory allocation.*
 
 Follow the prompts in the program and you should have stitched images!
-
-#### *ADDED: Confocal Stitching from SlideBook Outputs*
-
-To run using images exported using slidebook, use the following:
-
-> \> java -Xmx14G -jar FrankenStein_{version}.jar commandline (con)focal
-
-This is just added; there are no options for running headless yet, and there may be bugs. 
 
 #### *Running Headless*
 
@@ -43,7 +35,7 @@ Users that wish to use scripting or who are more comfortable may wish to use fla
 > \> java -Xmx{virtual_mem(int)}G -jar FrankenStein_{version}.jar {input_directory} {output_directory} {filename} {saveStacks (T/F)} {slices (optional)}
 
 Flags:
-    
+
     input_directory: directory that contains the images to be processed (absolute path)
     
     output_directory: directory processed images will be written to (absolute path)
@@ -67,8 +59,4 @@ You should be able to name your images anything without throwing an error, but t
 
 -If only reference images are present, the program will throw an error. Images will be stitched properly but Tile configs will not be cleaned up.
 
--Single Tile 2D images may cause issues when they are z-projected
-
-### *IN DEVELOPMENT*
-
-Currently working on an addition to stitch slidebook exports captured on the confocal we use. It's somewhat working at the moment, but still buggy. To run the confocal setting run with the flags  "command (con)focal".
+-Single Tile 2D images may cause issues if the user attempts to z-project them.
